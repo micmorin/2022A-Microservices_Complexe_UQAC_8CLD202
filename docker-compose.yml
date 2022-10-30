@@ -2,17 +2,19 @@ version: '1.0'
 
 services:
   web:
-    image: micmunger/8cld202:web-latest
+    #image: ${CI_REGISTRY_IMAGE}:web-v1.0.0
     ports:
-      - "81:5000"
+      - "80:5000"
     build:
       context: ./Web
       dockerfile: Dockerfile
 
   db:
-    image: micmunger/8cld202:db-latest
+    #image: ${CI_REGISTRY_IMAGE}:db-v1.0.0
     ports:
       - "5000:5000"
     build:
       context: ./DB
       dockerfile: Dockerfile
+    volumes:
+      - ./DB/app/:/app

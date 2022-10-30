@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}Liste Calculs{% endblock %}
+{% block content %}
+{{ super() }}
+
+<div class="row">
+    <div class="col">
+        <h1 class="mt-5">Gestion Calculs</h1>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col">
+        <h3 class="mt-5">Historique des Calculs</h3>
+    </div>
+</div>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col" style="width:10%">#</th>
+      <th scope="col" style="width:30%">Description</th>
+      <th scope="col" style="width:30%">Date</th>
+      <th scope="col" style="width:30%">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+      {% for calcul in calculs %}
+      <tr>
+          <th scope="row">{{calcul.id}}</th>
+          <td class="lead">{{calcul.description}}</td>
+          <td class="lead">{{calcul.date}}</td>
+          <td>
+              <button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#delete_{{calcul.id}}">Supprimer</button>
+          </td>
+      </tr>
+        <div class="modal fade" id="delete_{{calcul.id}}" tabindex="-1" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Supression d'un calcul</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                  <p>Etes-vous sur?</p>
+                  <form action="{{url_for('calcul.calcul_destroy',calcul_id=calcul.id)}}" method="post" id="form_deleteCalcul_{{calcul.id}}">
+                      <input type="hidden" id="commID" name="commID" value="{{calcul.id}}">
+                      </form>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                <button type="submit" class="btn btn-danger" form="form_deleteCalcul_{{calcul.id}}">Supprimer</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
