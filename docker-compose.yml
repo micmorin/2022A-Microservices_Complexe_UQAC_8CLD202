@@ -12,9 +12,34 @@ services:
   db:
     #image: ${CI_REGISTRY_IMAGE}:db-v1.0.0
     ports:
-      - "5000:5000"
+      - "5010:5000"
     build:
       context: ./DB
       dockerfile: Dockerfile
     volumes:
       - ./DB/app/:/app
+
+  bdd:
+    image: mysql
+    restart: always
+    environment:
+        MYSQL_ROOT_PASSWORD: fakepassword
+        MYSQL_DATABASE: IoTDatabase
+        MYSQL_USER: IoTUser
+        MYSQL_PASSWORD: IoTPassword
+    ports:
+        - 3306:3306
+    volumes:
+      - ./DB-API/sql:/docker-entrypoint-initdb.d
+
+  db-api:
+    ports:
+      - "5000:80"
+    build:
+      context: ./DB-API
+      dockerfile: Dockerfile
+    volumes:
+      - ./DB-API/app/:/app
+    depends_on:
+      - bdd
+    

@@ -20,7 +20,7 @@ class DevConfig(Config):
     TESTING = True
 
 class DB():
-    URL='http://db:5000'
+    URL='http://db-api:5000'
 
 
 
