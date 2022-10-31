@@ -30,16 +30,28 @@ services:
     ports:
         - 3306:3306
     volumes:
-      - ./DB-API/sql:/docker-entrypoint-initdb.d
+      - ./db_api/sql/:/docker-entrypoint-initdb.d/
 
   db-api:
     ports:
       - "5000:80"
     build:
-      context: ./DB-API
+      context: ./db_api
       dockerfile: Dockerfile
     volumes:
-      - ./DB-API/app/:/app
+      - ./db_api/app/:/app
     depends_on:
       - bdd
+
+  phpmyadmin:
+    image: phpmyadmin
+    links:
+      - bdd
+    environment:
+      PMA_HOST: bdd
+      PMA_PORT: 3306
+      PMA_ARBITRARY: 1
+    restart: always
+    ports:
+      - 8081:80
     
