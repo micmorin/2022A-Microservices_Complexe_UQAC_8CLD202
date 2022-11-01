@@ -14,7 +14,7 @@
 
     <body class="d-flex flex-column h-100">
         
-        <header>
+        <header class="mb-5">
             
             <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
                 <div class="container-fluid">
@@ -51,15 +51,6 @@
                                     {% endif %}
                                     <li><a class="dropdown-item" href="{{ url_for('main.main_logout') }}">Logout</a></li>
                                     
-                                    </ul>
-                                </li>
-                            </ul>
-
-                        {% else %}
-                            <ul class="navbar-nav mr-auto me-5 ms-2 mb-md-0">
-                                <li class="nav-item"><a class="nav-link" href="#">Register</a></li>
-                                <li class="nav-item"><a class="nav-link" href="{{ url_for('main.main_login') }}">Log In</a></li>
-                                
                                     </ul>
                                 </li>
                             </ul>

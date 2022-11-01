@@ -10,8 +10,10 @@ from config import DB
 ########
 
 def main_index():
-    return render_template('index.html')
-
+    if current_user.is_authenticated:
+        return render_template('index.html')
+    return redirect(url_for('main.main_login')) 
+    
 def main_login():
     form = LoginForm()
 
@@ -74,6 +76,7 @@ def user_index():
             return render_template('user_list.html', users="")
     return redirect(url_for('main.main_index'))
 
+@login_required
 def user_create():
     form=RegisterForm()
 
