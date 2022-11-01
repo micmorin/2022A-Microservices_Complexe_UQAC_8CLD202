@@ -1,5 +1,11 @@
-{% extends "base.html" %}
-{% block title %}Users list{% endblock %}
+{% extends "layouts/base.html" %}
+{% set active_page = "users" %}
+
+{% block title %} Utilisateurs {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
 {% block content %}
 {% with messages = get_flashed_messages() %} 
     {% if messages %}
@@ -12,120 +18,167 @@
     {% endif %} 
 {% endwith %}
 
-<div class="row">
-    <div class="col">
-        <h1 class="mt-5">Liste des Utilisateurs</h1>
-    </div>
-
-    <div class="col text-end">
-        <a class="btn btn-primary mt-5" href="{{url_for('user.user_create')}}"> Créer un nouvel utilisateur</a>
-    </div>
-</div>
-
-<table class="table table-striped">
-    <thead>
-      <tr>
-        <th scope="col" style="width:10%">#</th>
-        <th scope="col" style="width:15%">Nom</th>
-        <th scope="col" style="width:30%">Email</th>
-        <th scope="col" style="width:15%">Role</th>
-        <th scope="col" style="width:30%">Action</th>
-      </tr>
-    </thead>
-    <tbody>
-        {% for user in users %}        
-        <tr>
-            <th scope="row">{{user.id}}</th>
-            <td class="lead">{{user.name}}</td>
-            <td class="lead"><a href="mailto:{{user.email}}">{{user.email}}</a></td>
-            <td class="lead">{{user.profil}}</td>
-            <td>
-                <button class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#show_{{user.id}}">Voir</button>
-                    <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#update_{{user.id}}">Modifier</button>
-                    <button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#delete_{{user.id}}">Supprimer</button>
-            </td>
-        </tr>
-        <div class="modal fade" id="show_{{user.id}}" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title">Voir un utilisateur</h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                        <div class="row">
-                        <div class="col-6 my-1 text-align-center">Nom:</div>
-                        <div class="col-6 my-1 p-0 text-align-center"> <input type="text" id="name" name="name" value="{{user.name}}"></div>
-                        <div class="col-6 my-1 text-align-center"> Nom d'utilisateur:</div>
-                        <div class="col-6 my-1 p-0 text-align-center"> <input type="text" id="username" name="username" value="{{user.username}}"></div>
-                        <div class="col-6 my-1 text-align-center"> Addresse courriel:</div>
-                        <div class="col-6 my-1 p-0 text-align-center"> <input type="text" id="email" name="email" value="{{user.email}}"></div>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-                </div>
-              </div>
+  <div class="container-fluid py-4">
+    <div class="row">
+      <div class="col-12">
+        <div class="card my-4">
+          <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+            <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
+              <h6 class="text-white text-capitalize ps-3">Liste des Utilisateurs</h6>
+            </div>
+          </div>
+          <div class="card-body px-0 pb-2">
+            <div class="table-responsive p-0">
+              <table class="table table-striped align-items-center mb-0">
+                <thead>
+                  <tr>
+                    <th scope="col" class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" style="width:10%">#</th>
+                    <th scope="col" class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" style="width:15%">Nom</th>
+                    <th scope="col" class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"style="width:30%">Email</th>
+                    <th scope="col" class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" style="width:15%">Role</th>
+                    <th scope="col" class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"style="width:30%">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}        
+                    <tr>
+                        <th scope="row" class="align-middle text-center">{{user.id}}</th>
+                        <td class="align-middle text-center">{{user.name}}</td>
+                        <td class="align-middle text-center"><a href="mailto:{{user.email}}">{{user.email}}</a></td>
+                        <td class="align-middle text-center">{{user.profil}}</td>
+                        <td>
+                            <button class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#show_{{user.id}}">Voir</button>
+                                <button class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#update_{{user.id}}">Modifier</button>
+                                <button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#delete_{{user.id}}">Supprimer</button>
+                        </td>
+                    </tr>
+                    <div class="modal fade" id="show_{{user.id}}" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title">Voir un utilisateur</h5>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                    <div class="row">
+                                    <div class="col-6 my-1 text-align-center">Nom:</div>
+                                    <div class="col-6 my-1 p-0 text-align-center"> <input type="text" id="name" name="name" value="{{user.name}}"></div>
+                                    <div class="col-6 my-1 text-align-center"> Nom d'utilisateur:</div>
+                                    <div class="col-6 my-1 p-0 text-align-center"> <input type="text" id="username" name="username" value="{{user.username}}"></div>
+                                    <div class="col-6 my-1 text-align-center"> Addresse courriel:</div>
+                                    <div class="col-6 my-1 p-0 text-align-center"> <input type="text" id="email" name="email" value="{{user.email}}"></div>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="modal fade" id="update_{{user.id}}" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title">Modification d'un utilisateur</h5>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="{{url_for('user.user_update',user_id=user.id)}}" method="post" id="form_{{user.id}}">
+                                    <div class="row">
+                                    <div class="col-6 my-1 text-align-center">Nom:</div>
+                                    <div class="col-6 my-1 p-0 text-align-center"> <input type="text" id="name" name="name" value="{{user.name}}"></div>
+                                    <div class="col-6 my-1 text-align-center"> Nom d'utilisateur:</div>
+                                    <div class="col-6 my-1 p-0 text-align-center"> <input type="text" id="username" name="username" value="{{user.username}}"></div>
+                                    <div class="col-6 my-1 text-align-center"> Addresse courriel:</div>
+                                    <div class="col-6 my-1 p-0 text-align-center"> <input type="text" id="email" name="email" value="{{user.email}}"></div>
+                                    <div class="col-6 my-1 text-align-center"> Mot de passe:</div>
+                                    <div class="col-6 my-1 p-0 text-align-center"> <input type="password" id="password" name="password"></div>
+                                    <div class="col-6 my-1 text-align-center"> Profil:</div>
+                                    <div class="col-6 my-1 p-0 text-align-center"> 
+                                      <select name="profil" id="profil">
+                         <!--value should be based on profil-->               <option value="1" selected disabled hidden>Selectionner</option>
+                                          <option value="0">admin</option>
+                                          <option value="1">user</option>
+                                    </select></div>
+                                </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                              <button type="submit" class="btn btn-primary" form="form_{{user.id}}">Sauvegarder</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+            
+                      <div class="modal fade" id="delete_{{user.id}}" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title">Supression d'un utilisateur</h5>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p>Etes-vous sur?</p>
+                                <form action="{{url_for('user.user_destroy',user_id=user.id)}}" method="post" id="form_{{user.id}}_delete">
+                                    <input type="hidden" id="commID" name="commID" value="{{user.id}}">
+                                    </form>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                              <button type="submit" class="btn btn-danger" form="form_{{user.id}}_delete">Supprimer</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    {% endfor %}
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
-        <div class="modal fade" id="update_{{user.id}}" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title">Modification d'un utilisateur</h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form action="{{url_for('user.user_update',user_id=user.id)}}" method="post" id="form_{{user.id}}">
-                        <div class="row">
-                        <div class="col-6 my-1 text-align-center">Nom:</div>
-                        <div class="col-6 my-1 p-0 text-align-center"> <input type="text" id="name" name="name" value="{{user.name}}"></div>
-                        <div class="col-6 my-1 text-align-center"> Nom d'utilisateur:</div>
-                        <div class="col-6 my-1 p-0 text-align-center"> <input type="text" id="username" name="username" value="{{user.username}}"></div>
-                        <div class="col-6 my-1 text-align-center"> Addresse courriel:</div>
-                        <div class="col-6 my-1 p-0 text-align-center"> <input type="text" id="email" name="email" value="{{user.email}}"></div>
-                        <div class="col-6 my-1 text-align-center"> Mot de passe:</div>
-                        <div class="col-6 my-1 p-0 text-align-center"> <input type="password" id="password" name="password"></div>
-                        <div class="col-6 my-1 text-align-center"> Profil:</div>
-                        <div class="col-6 my-1 p-0 text-align-center"> 
-                          <select name="profil" id="profil">
-             <!--value should be based on profil-->               <option value="1" selected disabled hidden>Selectionner</option>
-                              <option value="0">admin</option>
-                              <option value="1">user</option>
-                        </select></div>
-                    </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-                  <button type="submit" class="btn btn-primary" form="form_{{user.id}}">Sauvegarder</button>
-                </div>
-              </div>
+      </div>
+      <div class="row">    
+        <div class="col mt-5 text-end">
+          <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#create_user">Créer un nouvel utilisateur</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="create_user" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Creation d'un Utilisateur</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form action="{{url_for('user.user_create')}}" method="post" id="newUser">
+            <div class="row">
+                <div class="col-6 my-1 text-align-end">Nom:</div>
+                <div class="col-6 my-1 p-0 text-align-center"> {{form.name}}</div>
+                <div class="col-6 my-1 text-align-center"> Nom d'utilisateur:</div>
+                <div class="col-6 my-1 p-0 text-align-center"> {{form.username}}</div>
+                <div class="col-6 my-1 text-align-center"> Addresse courriel:</div>
+                <div class="col-6 my-1 p-0 text-align-center"> {{form.email}}</div>
+                <div class="col-6 my-1 text-align-center"> Mot de passe:</div>
+                <div class="col-6 my-1 p-0 text-align-center"> {{form.password}}</div>
             </div>
-          </div>
+        </div>
+        
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+          <input id="submit" name="submit" type="submit" value="Creer" class="btn btn-primary">
+        </div>
+      </form>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+    
+  </div>
 
-          <div class="modal fade" id="delete_{{user.id}}" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title">Supression d'un utilisateur</h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <p>Etes-vous sur?</p>
-                    <form action="{{url_for('user.user_destroy',user_id=user.id)}}" method="post" id="form_{{user.id}}_delete">
-                        <input type="hidden" id="commID" name="commID" value="{{user.id}}">
-                        </form>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-                  <button type="submit" class="btn btn-danger" form="form_{{user.id}}_delete">Supprimer</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        {% endfor %}
-    </tbody>
-  </table>
+{% endblock content %}
 
-{% endblock %}
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}

@@ -1,109 +1,138 @@
-{% extends "base.html" %}
-{% block title %}Gestion Admin{% endblock %}
+{% extends "layouts/base.html" %}
+{% set active_page = "profils" %}
+
+{% block title %} Utilisateurs {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
 {% block content %}
-{{ super() }}
 
-<div class="row">
-    <div class="col">
-        <h1 class="mt-5">Gestion Administrateur</h1>
+{% with messages = get_flashed_messages() %} 
+    {% if messages %}
+    <div class="alert alert-primary" role="alert" id="messages">
+        <button type="button" class="btn-close" 
+                aria-label="Close" 
+                onclick="document.getElementById('messages').style.display = 'none';"></button>
+        {{ messages[0] }}
     </div>
-</div>
+    {% endif %} 
+{% endwith %}
 
-<div class="row">
-    <div class="col">
-        <h3 class="mt-5">Gestion Profils</h3>
-    </div>
-    <div class="col mt-5 text-end">
-        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#create_profile">Créer un nouveau profil</button>
-    </div>
-</div>
-<div class="modal fade" id="create_profile" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Creation d'un profil</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-            <form action="{{url_for('profil.profil_create')}}" method="POST" id="form_create_profile">
-                <div class="row">
-                <div class="col-3 my-1 text-align-center">Description:</div>
-                <div class="col-9 my-1 p-0 text-align-center"> <input type="text" id="description" name="description" style="width:90%"></div>
+  <div class="container-fluid py-4">
+    <div class="row">
+      <div class="col-12">
+        <div class="card my-4">
+          <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+            <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
+              <h6 class="text-white text-capitalize ps-3">Liste des Profils</h6>
             </div>
-        </form>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-          <button type="submit" class="btn btn-primary" form="form_create_profile">Creer</button>
+          </div>
+          <div class="card-body px-0 pb-2">
+            <div class="table-responsive p-0">
+              <table class="table table-striped align-items-center mb-0">
+              <thead>
+                <tr>
+                  <th scope="col" class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" style="width:10%">#</th>
+                  <th scope="col" class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" style="width:60%">Description</th>
+                  <th scope="col" class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" style="width:30%">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                  {% for profil in profils %}
+                  <tr>
+                      <th scope="row" class="align-middle text-center">{{profil.id}}</th>
+                      <td class="align-middle text-center">{{profil.description}}</td>
+                      <td class="align-middle text-center">
+                        {% if profil.description != "admin" %}
+                          <button class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#update_{{profil.id}}">Modifier</button>
+                          <button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#delete_{{profil.id}}">Supprimer</button>
+                          {% endif %}
+                      </td>
+                  </tr>
+                  {% if profil.description != "admin" %}
+                  <div class="modal fade" id="update_{{profil.id}}" tabindex="-1" aria-hidden="true">
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title">Modification d'un profil</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                          </div>
+                          <div class="modal-body">
+                              <form action="{{url_for('profil.profil_update',profil_id=profil.id)}}" method="post" id="form_updateProfil_{{profil.id}}">
+                                  <div class="row">
+                                      <div class="col-3 my-1 text-align-center">Description:</div>
+                                      <div class="col-9 my-1 p-0 text-align-center"> <input type="text" id="description" name="description" style="width:90%" value="{{profil.description}}"></div>
+                              </div>
+                              </form>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                            <button type="submit" class="btn btn-primary" form="form_updateProfil_{{profil.id}}">Sauvegarder</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="modal fade" id="delete_{{profil.id}}" tabindex="-1" aria-hidden="true">
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title">Supression d'un profil</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                          </div>
+                          <div class="modal-body">
+                              <p>Etes-vous sur?</p>
+                              <form action="{{url_for('profil.profil_destroy',profil_id=profil.id)}}" method="post" id="form_deleteProfil_{{profil.id}}">
+                                  <input type="hidden" id="commID" name="commID" value="{{profil.id}}">
+                                  </form>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                            <button type="submit" class="btn btn-danger" form="form_deleteProfil_{{profil.id}}">Supprimer</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    {% endif %}
+                  {% endfor %}
+              </tbody>
+            </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col mt-5 text-end">
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#create_profile">Créer un nouveau profil</button>
+        </div>
+    </div>
+    <div class="modal fade" id="create_profile" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Creation d'un profil</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="{{url_for('profil.profil_create')}}" method="POST" id="form_create_profile">
+                    <div class="row">
+                    <div class="col-3 my-1 text-align-center">Description:</div>
+                    <div class="col-9 my-1 p-0 text-align-center"> <input type="text" id="description" name="description" style="width:90%"></div>
+                </div>
+            </form>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+              <button type="submit" class="btn btn-primary" form="form_create_profile">Creer</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th scope="col" style="width:10%">#</th>
-      <th scope="col" style="width:60%">Description</th>
-      <th scope="col" style="width:30%">Action</th>
-    </tr>
-  </thead>
-  <tbody>
-      {% for profil in profils %}
-      <tr>
-          <th scope="row">{{profil.id}}</th>
-          <td class="lead">{{profil.description}}</td>
-          <td>
-            {% if profil.description != "admin" %}
-              <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#update_{{profil.id}}">Modifier</button>
-              <button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#delete_{{profil.id}}">Supprimer</button>
-              {% endif %}
-          </td>
-      </tr>
-      {% if profil.description != "admin" %}
-      <div class="modal fade" id="update_{{profil.id}}" tabindex="-1" aria-hidden="true">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title">Modification d'un profil</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-              <div class="modal-body">
-                  <form action="{{url_for('profil.profil_update',profil_id=profil.id)}}" method="post" id="form_updateProfil_{{profil.id}}">
-                      <div class="row">
-                          <div class="col-3 my-1 text-align-center">Description:</div>
-                          <div class="col-9 my-1 p-0 text-align-center"> <input type="text" id="description" name="description" style="width:90%" value="{{profil.description}}"></div>
-                  </div>
-                  </form>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-                <button type="submit" class="btn btn-primary" form="form_updateProfil_{{profil.id}}">Sauvegarder</button>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="modal fade" id="delete_{{profil.id}}" tabindex="-1" aria-hidden="true">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title">Supression d'un profil</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-              <div class="modal-body">
-                  <p>Etes-vous sur?</p>
-                  <form action="{{url_for('profil.profil_destroy',profil_id=profil.id)}}" method="post" id="form_deleteProfil_{{profil.id}}">
-                      <input type="hidden" id="commID" name="commID" value="{{profil.id}}">
-                      </form>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-                <button type="submit" class="btn btn-danger" form="form_deleteProfil_{{profil.id}}">Supprimer</button>
-              </div>
-            </div>
-          </div>
-        </div>
-        {% endif %}
-      {% endfor %}
-  </tbody>
-</table>
-{% endblock %}
+    
+  </div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}

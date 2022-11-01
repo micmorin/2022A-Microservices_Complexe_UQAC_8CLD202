@@ -67,13 +67,14 @@ def main_logout():
 
 @login_required
 def user_index():
+    form=RegisterForm()
     if current_user.profil == 'admin':
         response = requests.get(DB.URL+'/users/')
         if response.status_code == 200:
-            return render_template('user_list.html', users=response.json()['data'])
+            return render_template('user_list.html', users=response.json()['data'], form=form)
         else :
             flash(response.json()['message'])
-            return render_template('user_list.html', users="")
+            return render_template('user_list.html', users="", form=form)
     return redirect(url_for('main.main_index'))
 
 @login_required

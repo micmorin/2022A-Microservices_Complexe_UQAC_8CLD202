@@ -82,6 +82,7 @@ input:active[type=button] {
 }
 
 .btn-primary, .btn.bg-gradient-primary {
+    background-color: #02525b;
     box-shadow: 0 3px 3px 0 rgb(5 137 153 / 15%), 0 3px 1px -2px rgb(5 137 153 / 20%), 0 1px 5px 0 rgb(5 137 153 / 15%);
 }
 
@@ -100,3 +101,4 @@ input:active[type=button] {
     background-color: #56B6C2;
     border-color: #56B6C2;
 }
+
