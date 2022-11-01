@@ -1,9 +1,9 @@
-from sqlalchemy import Column, ForeignKey, Integer, String, Date, Time
+from database_init import Base
+from sqlalchemy import Column, ForeignKey, Integer, String, Date
 from sqlalchemy.orm import relationship
 
-from .database import Base
 
-class Users(Base):
+class User(Base):
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True)
@@ -12,7 +12,9 @@ class Users(Base):
     email = Column(String(120), unique=True, nullable=False)
     password = Column(String(120), nullable=False)
     token = Column(String(120), nullable=False)
-    profil_id = Column(Integer, ForeignKey('profil.id'), nullable=False, default=3)
+    profil_id = Column(Integer, ForeignKey('profil.id'), nullable=False, default=2)
+
+    profil = relationship("Profil")
 
     def __repr__(self):
         return '<User %r>' % self.username
@@ -58,6 +60,7 @@ class Calcul(Base):
     result = Column(Integer)
     date = Column(Date, nullable=False)
     user_id = Column(Integer, ForeignKey('user.id'), nullable=False)
+    
 
     def __repr__(self):
         return '<Calcul %r>' % self.name

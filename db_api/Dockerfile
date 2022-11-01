@@ -1,7 +1,8 @@
-FROM python:3-slim
+FROM python:3.8-slim
+WORKDIR /app
 
-WORKDIR /code
-COPY ./requirements.txt /code/requirements.txt
-RUN pip install --upgrade -r /code/requirements.txt
-COPY ./app /code/app 
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "80"]
+RUN python -m pip install --upgrade pip
+COPY requirements.txt requirements.txt
+RUN pip install -r requirements.txt
+EXPOSE 5000
+CMD [ "python", "run.py" ]

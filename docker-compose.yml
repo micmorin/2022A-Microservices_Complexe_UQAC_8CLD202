@@ -1,25 +1,29 @@
-version: '1.0'
-
+version: '3.0'
 services:
   web:
-    #image: ${CI_REGISTRY_IMAGE}:web-v1.0.0
+    container_name: 8CLD202-Serveur_Web
     ports:
       - "80:5000"
     build:
       context: ./Web
       dockerfile: Dockerfile
+    depends_on:
+    - dbapi
 
-  db:
-    #image: ${CI_REGISTRY_IMAGE}:db-v1.0.0
+  dbapi:
+    container_name: 8CLD202-API_pour_BDD
     ports:
-      - "5010:5000"
+      - "5011:5000"
     build:
-      context: ./DB
+      context: ./DB_API
       dockerfile: Dockerfile
     volumes:
-      - ./DB/app/:/app
+      - ./DB_API/app/:/app
+    depends_on:
+    - bdd
 
   bdd:
+    container_name: 8CLD202-Base_de_Donnees
     image: mysql
     restart: always
     environment:
@@ -30,28 +34,4 @@ services:
     ports:
         - 3306:3306
     volumes:
-      - ./db_api/sql/:/docker-entrypoint-initdb.d/
-
-  db-api:
-    ports:
-      - "5000:80"
-    build:
-      context: ./db_api
-      dockerfile: Dockerfile
-    volumes:
-      - ./db_api/app/:/app
-    depends_on:
-      - bdd
-
-  phpmyadmin:
-    image: phpmyadmin
-    links:
-      - bdd
-    environment:
-      PMA_HOST: bdd
-      PMA_PORT: 3306
-      PMA_ARBITRARY: 1
-    restart: always
-    ports:
-      - 8081:80
-    
+      - ./DB_API/sql/:/docker-entrypoint-initdb.d/
