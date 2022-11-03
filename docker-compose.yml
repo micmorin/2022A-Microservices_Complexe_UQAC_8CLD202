@@ -13,7 +13,7 @@ services:
     - dbapi
 
   dbapi:
-    container_name: 8CLD202-API_pour_BDD
+    container_name: 8CLD202-API_pour_MySQL
     ports:
       - "5011:5000"
     build:
@@ -25,15 +25,9 @@ services:
     - bdd
 
   bdd:
-    container_name: 8CLD202-Base_de_Donnees
-    image: mysql
+    container_name: 8CLD202-Base_de_Donnees_MySQL
     restart: always
-    environment:
-        MYSQL_ROOT_PASSWORD: fakepassword
-        MYSQL_DATABASE: IoTDatabase
-        MYSQL_USER: IoTUser
-        MYSQL_PASSWORD: IoTPassword
+    build:
+      dockerfile: ./DB_MySQL/Dockerfile
     ports:
         - 3306:3306
-    volumes:
-      - ./DB_API/sql/:/docker-entrypoint-initdb.d/
