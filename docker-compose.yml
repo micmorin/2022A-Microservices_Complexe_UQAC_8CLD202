@@ -37,6 +37,7 @@ services:
     container_name: 8CLD202-Base_de_Donnees_MySQL
     restart: always
     build:
-      dockerfile: ./DB_MySQL/Dockerfile
+      context: ./DB_MySQL
+      dockerfile: Dockerfile
     ports:
         - 3306:3306

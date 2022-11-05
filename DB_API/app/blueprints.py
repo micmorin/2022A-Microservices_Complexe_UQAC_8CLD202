@@ -22,3 +22,4 @@ profil.route("/delete",                        methods=['DELETE'])         (c.pr
 
 simulator = Blueprint('simulator', __name__,url_prefix="/simulator")
 
+simulator.route("/",                              methods=['GET'])         (c.simulator_index)

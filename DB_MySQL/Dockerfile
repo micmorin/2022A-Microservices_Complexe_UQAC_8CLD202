@@ -7,4 +7,4 @@ ENV MYSQL_PASSWORD IoTPassword
 
 EXPOSE 3306
 
-COPY ./DB_API/sql/ /docker-entrypoint-initdb.d/
+COPY ./sql /docker-entrypoint-initdb.d/

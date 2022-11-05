@@ -51,3 +51,24 @@ class Profil (Base):
     def to_json(self):
         return {"id":self.id,
                 "description":self.description}
+
+class Object (Base):
+    __tablename__ = "objet_registration"
+
+    id = Column(Integer, primary_key=True)
+    nom = Column(String(120), unique=True, nullable=False)
+    token = Column(String(120), unique=True, nullable=False)
+    type_obj = Column(String(120), nullable=False)
+    date_reg = Column(Date(), nullable=False)
+    status_reg = Column(Integer, nullable=False)
+
+    def __repr__(self):
+        return '<Objet %r>' % self.type_obj
+
+    def to_json(self):
+        return {"id":self.id,
+                "nom":self.nom,
+                "token":self.token,
+                "type_obj":self.type_obj,
+                "date_reg":self.date_reg,
+                "status_reg":self.status_reg }

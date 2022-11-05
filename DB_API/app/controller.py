@@ -1,5 +1,5 @@
 from queue import Empty
-from models import User, Profil
+from models import User, Profil, Object
 from flask import jsonify, request
 from werkzeug.security import check_password_hash, generate_password_hash
 from database_init import SessionLocal
@@ -127,3 +127,14 @@ def profil_delete():
 #############
 # SIMULATOR #
 #############
+
+def simulator_index():
+    with SessionLocal.begin() as db:
+        objets = db.query(Object).all()
+        if objets is Empty:
+            return jsonify({"message":"no objets found"}), 404
+        else:
+            objets_obj = []
+            for o in objets:
+                objets_obj.append(o.to_json())
+            return jsonify({"message":"ok", "data": objets_obj}), 200
