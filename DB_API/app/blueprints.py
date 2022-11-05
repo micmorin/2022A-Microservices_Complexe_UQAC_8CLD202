@@ -20,6 +20,7 @@ profil.route("/create",                        methods=['POST'])           (c.pr
 profil.route("/update",                        methods=['PUT'])            (c.profil_update)
 profil.route("/delete",                        methods=['DELETE'])         (c.profil_delete)
 
-simulator = Blueprint('simulator', __name__,url_prefix="/simulator")
+object = Blueprint('object', __name__,url_prefix="/objects")
 
-simulator.route("/",                              methods=['GET'])         (c.simulator_index)
+object.route("/",                              methods=['GET'])             (c.object_index)
+object.route('/update',                        methods=['PUT'])             (c.object_update)

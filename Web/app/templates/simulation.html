@@ -24,10 +24,13 @@
         <div class="card my-4">
           <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
             <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
-              <h6 class="text-white text-capitalize ps-3">Simulation d'objets</h6>
+              <h6 class="text-white text-capitalize ps-3">Simulation objets</h6>
             </div>
           </div>
           <div class="card-body px-0 pb-2">
+            <div class="server_response row">
+              <p></p>  
+            </div>
             <div class="table-responsive p-0">
               <table class="table table-striped align-items-center mb-0">
                 <thead>
@@ -145,6 +148,29 @@
       <div class="row">    
         <div class="col mt-5 text-end">
           <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#create_user">Créer un nouvel utilisateur</button>
+      </div>
+    </div>
+    <div class="modal fade" id="create_user" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Creation d'un Utilisateur</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form action="{{url_for('main.main_index')}}" method="post" id="form">
+              <div class="row">
+              <div class="col-6 my-1 text-align-center">Type:</div>
+              <div class="col-6 my-1 p-0 text-align-center"> <input type="text" id="type" name="type" value=""></div>    
+              </div>
+            </form>
+          </div>    
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+            <input id="submit" name="submit" type="submit" value="Creer" class="btn btn-primary">
+          </div>
+        </form>
+        </div>
       </div>
     </div>
   </div> 

@@ -19,7 +19,7 @@
               </div>
             </div>
             <div class="card-body">
-              <form role="form" class="text-start" action="{{url_for('main.main_login')}}" method="post" id="login">
+              <form role="form" class="text-start" action="{{url_for('main.main_login', next=request.args.get('next') )}}" method="post" id="login">
                 <p class="card-text text-center mt-4">Username: {{form.username}}</p>
                 <p class="card-text text-center">Password: {{form.password}}</p>
                 <p class="card-text text-center">Stay connected {{form.remember_me}}</p>

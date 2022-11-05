@@ -34,6 +34,6 @@ INSERT INTO users VALUES (1,'admin_nom','admin','admin@example.com','pbkdf2:sha2
 INSERT INTO users VALUES (2,'user_nom','user','guest@example.com','pbkdf2:sha256:260000$g3dOQjbUNjWZsmym$ce8788585e49a00cc313b36bdb9ed8a3245a159006a03aa51effc4018ccdcfc4','pbkdf2:sha256:260000$iP8Xg1Mkm0FHiUIT$148bece31167a593e93b919c9de55cb2dff46597a6d3fff833479dc43fe7592f',2);
 INSERT INTO objet_registration VALUES (1,'Camera St. Paul','123','Camera','2022-11-01',0);
 INSERT INTO objet_registration VALUES (2,'Camera Talbot','456','Camera','2022-11-02',1);
-INSERT INTO objet_registration VALUES (3,'Camera Université','789','Camera','2022-11-03',1);
+INSERT INTO objet_registration VALUES (3,'Camera Universite','789','Camera','2022-11-03',1);
 INSERT INTO objet_registration VALUES (4,'Sonde Jonquiere','012','Sonde_Niveau_Eau','2022-09-03',0);
 INSERT INTO objet_registration VALUES (5,'Sonde Chicoutimi','345','Sonde_Niveau_Eau','2022-09-03',1);

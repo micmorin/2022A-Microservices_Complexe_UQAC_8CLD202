@@ -124,13 +124,13 @@ def profil_delete():
     except:
         return jsonify({"message":'Un probleme est survenu.'}), 400     
 
-#############
-# SIMULATOR #
-#############
+##########
+# Object #
+##########
 
-def simulator_index():
+def object_index():
     with SessionLocal.begin() as db:
-        objets = db.query(Object).all()
+        objets = db.query(Object).order_by(Object.status_reg).order_by(Object.nom).all()
         if objets is Empty:
             return jsonify({"message":"no objets found"}), 404
         else:
@@ -138,3 +138,14 @@ def simulator_index():
             for o in objets:
                 objets_obj.append(o.to_json())
             return jsonify({"message":"ok", "data": objets_obj}), 200
+
+def object_update():
+    try:
+        with SessionLocal.begin() as db:
+            data = request.get_json()
+            profil = db.query(Object).filter_by(id=data["id"]).first()
+            profil.nom = data['nom']
+            profil.status_reg = data['status']
+            return jsonify({"message":"Le profil a ete mis a jour"}), 200
+    except:
+        return jsonify({"message":'Un probleme est survenu.'}), 400   

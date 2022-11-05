@@ -19,9 +19,9 @@ services:
     volumes:
       - ./Web/app/:/app
     depends_on:
-    - dbapi
+    - db_api
 
-  dbapi:
+  db_api:
     container_name: 8CLD202-API_pour_MySQL
     ports:
       - "5011:5000"
@@ -31,9 +31,9 @@ services:
     volumes:
       - ./DB_API/app/:/app
     depends_on:
-    - bdd
+    - bd_mysql
 
-  bdd:
+  bd_mysql:
     container_name: 8CLD202-Base_de_Donnees_MySQL
     restart: always
     build:

@@ -11,7 +11,12 @@ from config import DB
 
 def main_index():
     if current_user.is_authenticated:
-        return render_template('index.html')
+        response = requests.get(DB.URL+'/objects/')
+        if response.status_code == 200:
+            return render_template('index.html', objects=response.json()['data'])
+        else :
+            flash(response.json()['message'])
+            return render_template('index.html', objects="")
     return redirect(url_for('main.main_login')) 
     
 def main_login():
@@ -45,7 +50,8 @@ def main_login():
 
             # Redirect
             flash('Connexion reussie')
-            return redirect(url_for('main.main_index')) 
+            next = request.args.get('next')
+            return redirect(next or url_for('main.main_index'))
         
     # Connection Echoue
         else:
@@ -271,15 +277,41 @@ def profil_destroy(profil_id):
 
     return redirect(url_for('main.main_index'))
 
+##########
+# OBJECT #
+##########
+@login_required
+def object_update(object_id):
+    response = requests.put( DB.URL+'/objects/update', 
+        data=json.dumps( {
+            "id":object_id,
+            "nom":request.form['nom'],
+            "status":request.form['status_radio_'+str(object_id)]
+        }), 
+        headers={'Content-Type': 'application/json'})
+
+    # Update Reussie    
+    if response.status_code == 200:
+        flash('Modification reussie')
+    
+    # Update Echoue
+    else:
+        flash(response.json()['message'])
+    
+    return redirect(url_for('main.main_index'))
+    
+
 #############
 # SIMULATOR #
 #############
 @login_required
 def simulator_index():
-    response = requests.get(DB.URL+'/simulator/')
+    serveur= ""
+    if request.content_type == 'application/json':
+        serveur = request.get_json()
+    response = requests.get(DB.URL+'/objects/')
     if response.status_code == 200:
-        return render_template('simulation.html', objects=response.json()['data'])
+        return render_template('simulation.html', objects=response.json()['data'], serveur=serveur)
     else :
         flash(response.json()['message'])
-        return render_template('user_list.html', objects="")
-
+        return render_template('simulation.html', objects="", serveur=serveur)

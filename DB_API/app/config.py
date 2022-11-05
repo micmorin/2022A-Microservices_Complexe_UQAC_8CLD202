@@ -24,4 +24,4 @@ class DevConfig(Config):
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 class DB:
-    URL = 'bdd'
+    URL = 'bd_mysql'
