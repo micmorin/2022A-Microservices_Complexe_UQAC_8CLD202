@@ -1,6 +1,6 @@
 import requests
 import json
-from flask import render_template, flash, redirect, url_for, request
+from flask import render_template, flash, redirect, url_for, request, make_response
 from flask_login import login_user, logout_user, login_required, current_user
 from models import LoginForm, RegisterForm, User
 from config import DB
@@ -281,6 +281,22 @@ def profil_destroy(profil_id):
 # OBJECT #
 ##########
 @login_required
+def object_create():
+    response = requests.post( DB.URL+'/objects/create', 
+        data=json.dumps( {"type":request.form['type']} ), 
+        headers={'Content-Type': 'application/json'})
+
+    # Update Reussie    
+    if response.status_code == 200:
+        flash(response.json()['data'])
+    
+    # Update Echoue
+    else:
+        flash(response.json()['message'])
+    
+    return redirect(url_for('simulator.simulator_index'))
+
+@login_required
 def object_update(object_id):
     response = requests.put( DB.URL+'/objects/update', 
         data=json.dumps( {
@@ -306,12 +322,9 @@ def object_update(object_id):
 #############
 @login_required
 def simulator_index():
-    serveur= ""
-    if request.content_type == 'application/json':
-        serveur = request.get_json()
     response = requests.get(DB.URL+'/objects/')
     if response.status_code == 200:
-        return render_template('simulation.html', objects=response.json()['data'], serveur=serveur)
+        return render_template('simulation.html', objects=response.json()['data'])
     else :
         flash(response.json()['message'])
-        return render_template('simulation.html', objects="", serveur=serveur)
+        return render_template('simulation.html', objects="")

@@ -3,6 +3,7 @@ from models import User, Profil, Object
 from flask import jsonify, request
 from werkzeug.security import check_password_hash, generate_password_hash
 from database_init import SessionLocal
+from datetime import datetime
 
 ########
 # MAIN #
@@ -138,6 +139,22 @@ def object_index():
             for o in objets:
                 objets_obj.append(o.to_json())
             return jsonify({"message":"ok", "data": objets_obj}), 200
+
+def object_create():           
+    try:
+        with SessionLocal.begin() as db:
+            data = request.get_json()
+            new_object = Object(
+                nom = data['type'],
+                token = generate_password_hash(data['type']),
+                type_obj = data['type'],
+                date_reg = datetime.now(),
+                status_reg = 0 
+                )
+            db.add(new_object)
+            return jsonify({"message":'Objet ajoute!', 'data':new_object.to_json()}), 200
+    except Exception as e:
+        return jsonify({"message": e }), 400   
 
 def object_update():
     try:

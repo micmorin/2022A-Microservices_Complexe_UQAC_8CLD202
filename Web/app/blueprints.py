@@ -23,6 +23,7 @@ profil.route('/<int:profil_id>',                methods=['POST'])           (c.p
 
 object = Blueprint('object', __name__,url_prefix="/objects")
 
+object.route('/create',                         methods=['POST'])           (c.object_create)
 object.route('/edit/<int:object_id>',           methods=['POST'])           (c.object_update)
 
 simulator = Blueprint('simulator', __name__,url_prefix="/simulator")

@@ -23,4 +23,5 @@ profil.route("/delete",                        methods=['DELETE'])         (c.pr
 object = Blueprint('object', __name__,url_prefix="/objects")
 
 object.route("/",                              methods=['GET'])             (c.object_index)
+object.route("/create",                        methods=['POST'])            (c.object_create)
 object.route('/update',                        methods=['PUT'])             (c.object_update)
