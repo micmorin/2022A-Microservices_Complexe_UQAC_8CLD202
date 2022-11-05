@@ -24,6 +24,13 @@
         <span class="nav-link-text ms-1">Analyses</span>
       </div>
     </a>
+    <a class="nav-link text-white {% if active_page == 'simulator' %} active bg-gradient-primary {% endif %}" 
+        href="{{ url_for('simulator.simulator_index') }}">
+      <div class="text-white text-center me-2 d-flex align-items-center justify-content-left">
+        <i class="material-icons opacity-10">developer_board</i>
+        <span class="nav-link-text ms-1">Simulation</span>
+      </div>
+    </a>
     {% if current_user.profil == "admin" %}
     <a class="nav-link text-white {% if active_page == 'users' %} active bg-gradient-primary {% endif %}" 
         href="{{ url_for('user.user_index') }}">

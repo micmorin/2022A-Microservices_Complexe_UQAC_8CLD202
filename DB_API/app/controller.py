@@ -1,5 +1,5 @@
 from queue import Empty
-from models import User, Profil, Calcul
+from models import User, Profil
 from flask import jsonify, request
 from werkzeug.security import check_password_hash, generate_password_hash
 from database_init import SessionLocal

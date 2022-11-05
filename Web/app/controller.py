@@ -274,3 +274,12 @@ def profil_destroy(profil_id):
 #############
 # SIMULATOR #
 #############
+@login_required
+def simulator_index():
+    response = requests.get(DB.URL+'/users/')
+    if response.status_code == 200:
+        return render_template('simulation.html', users=response.json()['data'])
+    else :
+        flash(response.json()['message'])
+        return render_template('user_list.html', users="")
+
