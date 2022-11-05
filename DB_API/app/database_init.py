@@ -1,10 +1,9 @@
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-import models
-from time import sleep
+from config import DB
 
-SQLALCHEMY_DATABASE_URL = "mysql+pymysql://root:fakepassword@bdd/IoTDatabase"
+SQLALCHEMY_DATABASE_URL = "mysql+pymysql://root:fakepassword@"+DB.URL+"/IoTDatabase"
 
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
@@ -13,4 +12,4 @@ Base = declarative_base()
 
 
 def init_app(app):
-    x =1
+    x = 1
