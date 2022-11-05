@@ -124,31 +124,6 @@ def profil_delete():
     except:
         return jsonify({"message":'Un probleme est survenu.'}), 400     
 
-##########
-# CALCUL #
-##########
-
-def calcul_index():
-    with SessionLocal.begin() as db:
-        data = request.get_json()
-        calculs = db.query(Calcul).filter_by(user_id=data["user_id"]).all()
-        if calculs is Empty:
-            return jsonify({"message":"no calculs found"}), 404
-        else:
-            calculs_obj = []
-            for c in calculs:
-                calculs_obj.append(c.to_json())
-            return jsonify({"message":"ok", "data": calculs_obj}), 200
-
-def calcul_delete():
-    try:
-        with SessionLocal.begin() as db:
-            data = request.get_json()
-            calcul = db.query(Calcul).filter_by(id=data["id"]).first()
-            if calcul.user_id == data["user_id"]:
-                db.session.delete(calcul)
-                return jsonify({"message":"Le profil a ete supprime!"}), 200
-            else:
-                return jsonify({"message":'Acces Interdit.'}), 501  
-    except:
-        return jsonify({"message":'Un probleme est survenu.'}), 400   
+#############
+# SIMULATOR #
+#############

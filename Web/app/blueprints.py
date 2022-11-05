@@ -21,7 +21,4 @@ profil.route('/create',                         methods=['POST'])           (c.p
 profil.route('/edit/<int:profil_id>',           methods=['POST'])           (c.profil_update)
 profil.route('/<int:profil_id>',                methods=['POST'])           (c.profil_destroy)
 
-calcul = Blueprint('calcul', __name__,url_prefix="/calculs")
-
-calcul.route('/',                               methods=['GET'])            (c.calcul_index)
-calcul.route('/<int:calcul_id>',                methods=['POST'])           (c.calcul_destroy)
+simulator = Blueprint('simulator', __name__,url_prefix="/simulator")

@@ -51,22 +51,3 @@ class Profil (Base):
     def to_json(self):
         return {"id":self.id,
                 "description":self.description}
-
-class Calcul(Base):
-    __tablename__ = "calcul"
-
-    id = Column(Integer, primary_key=True)
-    body = Column(String(120), nullable=False)
-    result = Column(Integer)
-    date = Column(Date, nullable=False)
-    user_id = Column(Integer, ForeignKey('user.id'), nullable=False)
-    
-
-    def __repr__(self):
-        return '<Calcul %r>' % self.name
-
-    def to_json(self):
-        return {"id":self.id,
-                "description":self.body+" = "+ str(self.result),
-                "date":self.date,
-                "user_id":self.user_id}

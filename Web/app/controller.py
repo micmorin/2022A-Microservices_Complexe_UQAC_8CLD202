@@ -271,38 +271,6 @@ def profil_destroy(profil_id):
 
     return redirect(url_for('main.main_index'))
 
-##########
-# CALCUL #
-##########
-@login_required
-def calcul_index():
-    response = requests.post( DB.URL+'/calculs/', 
-            data=json.dumps( {
-                "user_id":current_user.id
-            }), 
-            headers={'Content-Type': 'application/json'})
-
-    if response.status_code == 200:
-        return render_template('calcul_list.html', calculs=response.json()['data'])
-    else :
-        flash(response.json()['message'])
-        return redirect(url_for('main.main_index'))
-
-@login_required
-def calcul_destroy(calcul_id):
-    response = requests.delete( DB.URL+'/calculs/delete', 
-        data=json.dumps( {
-            "user_id":current_user.id,
-            "id":calcul_id
-        }), 
-        headers={'Content-Type': 'application/json'})
-
-
-# Delete Reussie    
-    if response.status_code == 200:
-        flash('Suppression reussie')
-        
-# Delete Echoue
-    else:
-        flash(response.json()['message'])
-    return redirect(url_for('calcul.calcul_index'))    
+#############
+# SIMULATOR #
+#############

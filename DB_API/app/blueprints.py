@@ -20,7 +20,5 @@ profil.route("/create",                        methods=['POST'])           (c.pr
 profil.route("/update",                        methods=['PUT'])            (c.profil_update)
 profil.route("/delete",                        methods=['DELETE'])         (c.profil_delete)
 
-calcul = Blueprint('calcul', __name__,url_prefix="/calculs")
+simulator = Blueprint('simulator', __name__,url_prefix="/simulator")
 
-calcul.route("/",                              methods=['POST'])           (c.calcul_index)
-calcul.route("/delete",                        methods=['DELETE'])         (c.calcul_delete)
