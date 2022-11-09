@@ -29,3 +29,9 @@ object.route('/edit/<int:object_id>',           methods=['POST'])           (c.o
 simulator = Blueprint('simulator', __name__,url_prefix="/simulator")
 
 simulator.route('/',                            methods=['GET'])            (c.simulator_index)
+simulator.route('/create',                      methods=['POST'])           (c.simulator_create)
+
+analytics = Blueprint('analytics', __name__,url_prefix="/analytics")
+
+analytics.route('/',                            methods=['GET'])            (c.analytics_index)
+analytics.route('/delete',                       methods=['POST'])          (c.analytics_delete)

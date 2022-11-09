@@ -28,6 +28,14 @@ CREATE TABLE objet_registration (
 	UNIQUE(token)
 );
 
+CREATE TABLE metrics (
+	id	INTEGER NOT NULL AUTO_INCREMENT,
+	access_date	TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	access_page VARCHAR(120) NOT NULL,
+	access_duration INTEGER NOT NULL,
+	PRIMARY KEY(id)
+);
+
 INSERT INTO profil VALUES (1,'admin');
 INSERT INTO profil VALUES (2,'user');
 INSERT INTO users VALUES (1,'admin_nom','admin','admin@example.com','pbkdf2:sha256:260000$1jSffTrWttV0Gld3$0cf28460f1afc048b5aed69a797626a81f0d06d0d81ca063ee6d77bb35dbdc24','pbkdf2:sha256:260000$yeoRsL644ky5Kuii$a754ab49545d32b0487e2fa9abfcbd8bdfb0aa05d9dde126bd48b2825bfcc640',1);

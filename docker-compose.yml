@@ -1,43 +1,53 @@
-# [INDEX]  (Obj_List)     Web - DB_API - DB_MySQL - List 
-# [INDEX]  (Analytics)    Web - IoT_API - DB_IoT - Get Data + Process Data
-# [CREATE] (Obj_Data)     Obj - IoT_API - DB_IoT - Add Data
-# [CREATE] (Registration) Obj - IoT_API - DB_MySQL - Token 
-# [CREATE] (Confirmation) Web - Approve - DB_API - Approve Token
-# [UPDATE] (Name_Change)  Web - DB_API - DB_MySQL - Change Name
-# [DELETE] (Deactivate)   Web - DB_API - DB_MySQL - Status Change
-# [DELETE] (Obj_Data)     Obj - IoT_API - DB_IoT - Delete Data
-
 version: '3.0'
 services:
   web:
     container_name: 8CLD202-Serveur_Web
     ports:
-      - "80:5000"
+      - "80:5000" # NECESSARY ports for Deployment
     build:
       context: ./Web
       dockerfile: Dockerfile
     volumes:
-      - ./Web/app/:/app
+      - ./Web/app/:/app # Overrides Dockerfile COPY for development
     depends_on:
-    - db_api
+    - mysql_api
+    - iot_api
 
-  db_api:
-    container_name: 8CLD202-API_pour_MySQL
-    ports:
-      - "5011:5000"
+  iot_api:
+    container_name: 8CLD202-API_pour_IoTDB
     build:
-      context: ./DB_API
+      context: ./IoT_API
+      dockerfile: Dockerfile
+    ports:
+      - "3456:5000" # NECESSARY ports for Deployment
+    volumes:
+      - ./IoT_API/app/:/app # Overrides Dockerfile COPY for development
+    depends_on:
+    - mysql_api
+
+  mysql_api:
+    container_name: 8CLD202-API_pour_MySQL
+    build:
+      context: ./MySQL_API
       dockerfile: Dockerfile
     volumes:
-      - ./DB_API/app/:/app
+      - ./MySQL_API/app/:/app # Overrides Dockerfile COPY for development
     depends_on:
-    - bd_mysql
+    - mysql_db
 
-  bd_mysql:
+  mysql_db:
     container_name: 8CLD202-Base_de_Donnees_MySQL
     restart: always
     build:
-      context: ./DB_MySQL
+      context: ./MySQL_DB
       dockerfile: Dockerfile
+
+  iot_db:
+    container_name: 8CLD202-Base_de_Donnees_IoTDB
+    restart: always
     ports:
-        - 3306:3306
+      - 6667:6667 # NECESSARY ports for Deployment
+      - 9091:9091 # NECESSARY ports for Deployment
+    build:
+      context: ./IoT_DB
+      dockerfile: Dockerfile

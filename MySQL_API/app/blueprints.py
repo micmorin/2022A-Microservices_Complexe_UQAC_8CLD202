@@ -5,6 +5,8 @@ main = Blueprint('main',__name__, url_prefix="/")
 
 main.route("/",                                 methods=['GET'])            (c.main_index)
 main.route("/login",                            methods=['POST'])           (c.main_login)
+main.route("/metrics",                          methods=['GET'])            (c.main_metrics_index)
+main.route("/metrics/create",                   methods=['POST'])           (c.main_metrics_create)
 
 user = Blueprint('user', __name__,url_prefix="/users")
 

@@ -1,5 +1,5 @@
 from database_init import Base
-from sqlalchemy import Column, ForeignKey, Integer, String, Date
+from sqlalchemy import Column, ForeignKey, Integer, String, Date, TIMESTAMP, FetchedValue
 from sqlalchemy.orm import relationship
 
 
@@ -72,3 +72,20 @@ class Object (Base):
                 "type_obj":self.type_obj,
                 "date_reg":self.date_reg,
                 "status_reg":self.status_reg }
+
+class Metrics (Base):
+    __tablename__ = "metrics"
+
+    id = Column(Integer, primary_key=True)
+    access_date = Column(TIMESTAMP, nullable=False, server_default=FetchedValue())
+    access_page = Column(String(120), nullable=False)
+    access_duration = Column(Integer, nullable=False)
+
+    def __repr__(self):
+        return '<Metrics %r>' % self.id
+
+    def to_json(self):
+        return {"id":self.id,
+                "access_date":self.access_date,
+                "access_page":self.access_page,
+                "access_duration":self.access_duration}

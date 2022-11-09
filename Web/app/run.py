@@ -1,6 +1,6 @@
 from flask import Flask
 from flask_bootstrap import Bootstrap
-from blueprints import main, user, profil, simulator, object
+from blueprints import main, user, profil, simulator, object, analytics
 from login_init import login_manager
 
 if __name__ == "__main__":
@@ -16,6 +16,7 @@ if __name__ == "__main__":
     app.register_blueprint(profil)
     app.register_blueprint(simulator)
     app.register_blueprint(object)
+    app.register_blueprint(analytics)
 
     # Start Server
     app.run(host='0.0.0.0',port=5000)

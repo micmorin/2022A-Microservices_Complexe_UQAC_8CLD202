@@ -141,3 +141,35 @@ input:active[type=button] {
     padding: 4px 10px 4px 10px;
     box-shadow: 0 1px 1px rgb(0 0 0 / 5%);
 }
+
+.bg-0 h5, .bg-0, .bg-3, .bg-3 h5, .bg-4, .bg-4 h5{
+    color:white;
+}
+
+.bg-1, .bg-2, .bg-5 {
+    color:#344767;
+}
+
+.bg-0 {
+    background-color: #E06C75;
+}
+
+.bg-1 {
+    background-color: #98C379;
+}
+
+.bg-2 {
+    background-color: #D19A66;
+}
+
+.bg-3 {
+    background-color: #61AFEF;
+}
+
+.bg-4 {
+    background-color: #C678DD;
+}
+
+.bg-5 {
+    background-color: #D0D4DC;
+}

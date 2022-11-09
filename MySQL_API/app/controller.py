@@ -1,5 +1,5 @@
 from queue import Empty
-from models import User, Profil, Object
+from models import User, Profil, Object, Metrics
 from flask import jsonify, request
 from werkzeug.security import check_password_hash, generate_password_hash
 from database_init import SessionLocal
@@ -166,3 +166,31 @@ def object_update():
             return jsonify({"message":"Le profil a ete mis a jour"}), 200
     except:
         return jsonify({"message":'Un probleme est survenu.'}), 400   
+
+###########
+# Metrics #
+###########
+
+def main_metrics_index():
+    with SessionLocal.begin() as db:
+        metrics = db.query(Metrics).order_by(Metrics.access_page).all()
+        if metrics is Empty:
+            return jsonify({"message":"no metrics found", "data":"No data"}), 400
+        else:
+            metrics_obj = []
+            for m in metrics:
+                metrics_obj.append(m.to_json())
+            return jsonify({"message":"ok", "data": metrics_obj}), 200
+
+def main_metrics_create():
+    try:
+        with SessionLocal.begin() as db:
+            data = request.get_json()
+            new_metrics = Metrics(
+                access_page = data['access_page'],
+                access_duration = data['access_duration']
+                )
+            db.add(new_metrics)
+            return jsonify({"message":'Metrics ajoute!'}), 200
+    except Exception as e:
+        return jsonify({"message": e }), 400
