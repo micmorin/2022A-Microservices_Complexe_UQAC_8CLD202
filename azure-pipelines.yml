@@ -22,11 +22,17 @@ stages:
       - task: Docker@2
         inputs:
           containerRegistry: 'Docker Hub'
-          command: 'logout'
+          repository: '8cld202'
+          command: 'build'
+          Dockerfile: 'Web/Dockerfile'
+          tags: 'web'
       - task: Docker@2
         inputs:
           containerRegistry: 'Docker Hub'
-          repository: '8cld202'
-          command: 'buildAndPush'
-          Dockerfile: 'Web/Dockerfile'
+          command: 'login'
+      - task: Docker@2
+        inputs:
+          containerRegistry: 'Docker Hub'
+          repository: 'micmunger/8cld202'
+          command: 'push'
           tags: 'web'
