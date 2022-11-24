@@ -7,6 +7,8 @@ services:
     build:
       context: ./Web
       dockerfile: Dockerfile
+      tags:
+        - "micmunger/8cld202:web"
     volumes:
       - ./Web/app/:/app # Overrides Dockerfile COPY for development
     depends_on:
@@ -22,6 +24,8 @@ services:
     build:
       context: ./IoT_API
       dockerfile: Dockerfile
+      tags:
+        - "micmunger/8cld202:iot_api"
     ports:
       - "3456:5000" # NECESSARY ports for Deployment
     volumes:
@@ -38,6 +42,8 @@ services:
     build:
       context: ./MySQL_API
       dockerfile: Dockerfile
+      tags:
+        - "micmunger/8cld202:mysql_api"
     volumes:
       - ./MySQL_API/app/:/app # Overrides Dockerfile COPY for development
     depends_on:
@@ -53,6 +59,8 @@ services:
     build:
       context: ./MySQL_DB
       dockerfile: Dockerfile
+      tags:
+        - "micmunger/8cld202:mysql_db"
     deploy:
       placement:
         constraints:
@@ -67,6 +75,8 @@ services:
     build:
       context: ./IoT_DB
       dockerfile: Dockerfile
+      tags:
+        - "micmunger/8cld202:iot_db"
     deploy:
         placement:
           constraints:
