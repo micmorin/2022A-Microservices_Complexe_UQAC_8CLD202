@@ -19,4 +19,4 @@ stages:
     pool:
       vmImage: ubuntu-latest
     steps:
-      - script: /usr/bin/docker build --pull -t 8cld202:web /home/vsts/work/1/s/Web && /usr/bin/docker login -u $(username) -p $(password) docker.io && /usr/bin/docker push micmunger/8cld202:web
+      - script: /usr/bin/docker build --pull -t micmunger/8cld202:web ./Web && /usr/bin/docker login -u $(username) -p $(password) docker.io && /usr/bin/docker push micmunger/8cld202:web
