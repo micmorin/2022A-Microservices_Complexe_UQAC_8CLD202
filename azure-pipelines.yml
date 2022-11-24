@@ -21,3 +21,15 @@ stages:
     steps:
       - script: /usr/bin/docker build --pull -t micmunger/8cld202:web ./Web && /usr/bin/docker login -u $(username) -p $(password) docker.io && /usr/bin/docker push micmunger/8cld202:web
         displayName: Build and Push Web
+
+      - script: /usr/bin/docker build --pull -t micmunger/8cld202:mysql_db ./MySQL_DB && /usr/bin/docker login -u $(username) -p $(password) docker.io && /usr/bin/docker push micmunger/8cld202:mysql_db
+        displayName: Build and Push MySQL_DB
+
+      - script: /usr/bin/docker build --pull -t micmunger/8cld202:mysql_api ./MySQL_API && /usr/bin/docker login -u $(username) -p $(password) docker.io && /usr/bin/docker push micmunger/8cld202:mysql_api
+        displayName: Build and Push MySQL_API
+
+      - script: /usr/bin/docker build --pull -t micmunger/8cld202:iot_db ./IoT_DB && /usr/bin/docker login -u $(username) -p $(password) docker.io && /usr/bin/docker push micmunger/8cld202:iot_db
+        displayName: Build and Push IoT_DB
+
+      - script: /usr/bin/docker build --pull -t micmunger/8cld202:iot_api ./IoT_API && /usr/bin/docker login -u $(username) -p $(password) docker.io && /usr/bin/docker push micmunger/8cld202:iot_api
+        displayName: Build and Push IoT_API
