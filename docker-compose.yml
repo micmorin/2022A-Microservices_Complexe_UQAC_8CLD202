@@ -15,7 +15,7 @@ services:
     deploy:
       placement:
         constraints:
-          - node.hostname == Web
+          - "node.hostname == Web"
 
   iot_api:
     container_name: 8CLD202-API_pour_IoTDB
@@ -31,7 +31,7 @@ services:
     deploy:
       placement:
         constraints:
-          - node.hostname == IoT
+          - "node.hostname == IoT"
 
   mysql_api:
     container_name: 8CLD202-API_pour_MySQL
@@ -45,7 +45,7 @@ services:
     deploy:
       placement:
         constraints:
-          - node.hostname == MySQL
+          - "node.hostname == MySQL"
 
   mysql_db:
     container_name: 8CLD202-Base_de_Donnees_MySQL
@@ -56,7 +56,7 @@ services:
     deploy:
       placement:
         constraints:
-          - node.hostname == MySQL
+          - "node.hostname == MySQL"
 
   iot_db:
     container_name: 8CLD202-Base_de_Donnees_IoTDB
@@ -69,5 +69,5 @@ services:
       dockerfile: Dockerfile
     deploy:
         placement:
-        constraints:
-            - node.hostname == IoT
+          constraints:
+              - "node.hostname == IoT"
