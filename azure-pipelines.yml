@@ -1,7 +1,4 @@
 # Docker
-# Build a Docker image
-# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
-
 trigger:
 - main
 
@@ -20,10 +17,10 @@ stages:
     pool:
       vmImage: ubuntu-latest
     steps:
-    - task: Docker@2
-      displayName: Build an image
+    - task: DockerCompose@0
       inputs:
-        command: build
-        dockerfile: '$(Build.SourcesDirectory)/DB/Dockerfile'
-        tags: |
-          $(tag)
+        containerregistrytype: 'Container Registry'
+        dockerRegistryEndpoint: 'Docker Hub'
+        dockerComposeFile: '**/docker-compose.yml'
+        action: 'Build services'
+        includeLatestTag: true
