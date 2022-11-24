@@ -97,8 +97,79 @@ input:active[type=button] {
 }
 
 .alert-primary {
-    color: #02525b;
-    background-color: #56B6C2;
+    color: #fff;
+    background-color: #02525b;
     border-color: #56B6C2;
 }
 
+.card .card-header {
+    padding: 0.5rem 1rem;
+    margin-bottom: 0;
+    background-color: rgba(0, 0, 0, 0.03);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+}
+
+.card .card-footer {
+    padding: 0.5rem 1rem;
+    background-color: rgba(0, 0, 0, 0.03);
+    border-top: 1px solid rgba(0, 0, 0, 0.125);
+}
+
+.server_response {
+    color: #fff;
+    background-color: #2b2b2b;
+    border: 1px solid #E3E3E3;
+    border-radius: 4px 4px 4px 4px;
+    box-shadow: 0 1px 1px rgb(0 0 0 / 5%) inset;
+    margin-bottom: 20px;
+    min-height: 20px;
+    padding: 40px 19px 19px 45px;
+    position: relative;
+}
+
+.server_response:before {
+    content: 'Reponse Serveur';
+    border-right: 1px solid #e3e3e3;
+    border-bottom: 1px solid #e3e3e3;
+    border-bottom-right-radius: 4px;
+    background-color: #fff;
+    color: #02525b;
+    font-weight: bold;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    padding: 4px 10px 4px 10px;
+    box-shadow: 0 1px 1px rgb(0 0 0 / 5%);
+}
+
+.bg-0 h5, .bg-0, .bg-3, .bg-3 h5, .bg-4, .bg-4 h5{
+    color:white;
+}
+
+.bg-1, .bg-2, .bg-5 {
+    color:#344767;
+}
+
+.bg-0 {
+    background-color: #E06C75;
+}
+
+.bg-1 {
+    background-color: #98C379;
+}
+
+.bg-2 {
+    background-color: #D19A66;
+}
+
+.bg-3 {
+    background-color: #61AFEF;
+}
+
+.bg-4 {
+    background-color: #C678DD;
+}
+
+.bg-5 {
+    background-color: #D0D4DC;
+}

@@ -5,6 +5,8 @@ main = Blueprint('main',__name__, url_prefix="/")
 
 main.route("/",                                 methods=['GET'])            (c.main_index)
 main.route("/login",                            methods=['POST'])           (c.main_login)
+main.route("/metrics",                          methods=['GET'])            (c.main_metrics_index)
+main.route("/metrics/create",                   methods=['POST'])           (c.main_metrics_create)
 
 user = Blueprint('user', __name__,url_prefix="/users")
 
@@ -20,7 +22,8 @@ profil.route("/create",                        methods=['POST'])           (c.pr
 profil.route("/update",                        methods=['PUT'])            (c.profil_update)
 profil.route("/delete",                        methods=['DELETE'])         (c.profil_delete)
 
-calcul = Blueprint('calcul', __name__,url_prefix="/calculs")
+object = Blueprint('object', __name__,url_prefix="/objects")
 
-calcul.route("/",                              methods=['POST'])           (c.calcul_index)
-calcul.route("/delete",                        methods=['DELETE'])         (c.calcul_delete)
+object.route("/",                              methods=['GET'])             (c.object_index)
+object.route("/create",                        methods=['POST'])            (c.object_create)
+object.route('/update',                        methods=['PUT'])             (c.object_update)

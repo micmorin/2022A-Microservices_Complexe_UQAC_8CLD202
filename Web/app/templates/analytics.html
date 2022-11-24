@@ -1,0 +1,176 @@
+{% extends "layouts/base.html" %}
+{% set active_page = "analyses" %}
+
+{% block title %} Dashboard {% endblock %} 
+
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+{% with messages = get_flashed_messages() %} 
+    {% if messages %}
+    <div class="alert alert-primary" role="alert" id="messages">
+        <button type="button" class="btn-close" 
+                aria-label="Close" 
+                onclick="document.getElementById('messages').style.display = 'none';"></button>
+        {{ messages[0] }}
+    </div>
+    {% endif %} 
+{% endwith %}
+<div class="container-fluid py-4">
+  <div class="row">
+    <div class="col-12">
+      <div class="card my-4">
+        <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+          <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
+            <h6 class="text-white text-capitalize ps-3">Analyses</h6>
+          </div>
+        </div>
+        <div class="row p-2 justify-content-center">
+          {% for obj in summary %}
+          <h5 class="mt-5 text-capitalize text-center col-12 mx-auto">{{obj.title}}</h5>
+            {% for x in range(obj.data|length) %}
+              <div class="col-3 p-3"><div class=" card bg-{{x%6}} p-3"><p>{{obj.data[x].title}}</p><h5 class="text-center">{{obj.data[x].data|float|round(2, 'floor')}}</h5></div></div>
+            {% endfor %}
+          {% endfor %}
+        </div>
+        <div class="row justify-content-center">
+          <div class="col-3 p-3 text-center"><button class="btn btn-outline-warning" onclick="display('iotrecords')">Donnees de IoTDB (Long)</button></div>
+          <div class="col-3 p-3 text-center"><button class="btn btn-outline-warning" onclick="display('iotmetrics')">Metrics de IoTDB (Long)</button></div>
+          <div class="col-3 p-3 text-center"><button class="btn btn-outline-warning" onclick="display('mysqlrecords')">Donnees de MySQL (Long)</button></div>
+          <div class="col-3 p-3 text-center"><button class="btn btn-outline-warning" onclick="display('mysqlmetrics')">Metrics de MySQL (Long)</button></div>
+        </div>
+        <div class="row p-3" id="iotrecords" style="display:none">
+          <h6 class="text-capitalize text-center col-12 mx-auto">Donnees de IoTDB (LONG)</h6>
+          {% for obj in iotdb_records %}
+          <div class="p-3 col-12">
+            <h6 class="text-center">{{obj["nom"]}}</h6>
+            <table class="table table-striped align-items-center mb-0">
+              <thead>
+                <tr>
+                  <th scope="col" class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" style="width:30%">Temps</th>
+                  {% for m in obj["mesures"] %}<th scope="col" class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" style="width:15%">{{m}}</th>{% endfor %}
+                  <th scope="col" class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" style="width:30%">Action</th>
+                </tr>
+              </thead>
+              <tbody> 
+                {% for r in obj["records"] %}  
+                <tr>
+                  <form action="{{url_for('analytics.analytics_delete')}}" method="post">
+                    <th scope="row" class="align-middle text-center">{{r["Time"]}}</th>
+                      {% for key, value in r.items() %}
+                        {% if key != "Time" %}<td class="align-middle text-center">{{value}}</td>
+                        {% endif %}
+                      {% endfor %}
+                      <input type="hidden" id="nom" name="nom" value='{{obj["nom"]}}'>
+                      <input type="hidden" id="time" name="time" value='{{r["Time"]}}'>
+                      <input type="hidden" id="type" name="type" value='{{obj["type"]}}'>
+                    <td class="align-middle text-center"><input class="btn btn-outline-danger my-auto p-1" type="submit" value="Supprimer"></td>
+                  </form>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          {% endfor %}
+        </div>
+        <div class="row p-3" id="iotmetrics" style="display:none">
+          <h6 class="text-capitalize text-center col-12 mx-auto">Metrics de IoTDB (LONG)</h6>
+          <div class="p-3 col-12">
+            <table class="table table-striped align-items-center mb-0">
+              <thead>
+                <tr>
+                  <th scope="col" class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" style="width:40%">Titre</th>
+                  <th scope="col" class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" style="width:40%">Description</th>
+                  <th scope="col" class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" style="width:20%">Mesure</th>
+                </tr>
+              </thead>
+              <tbody> 
+                {% for m in iotdb_metrics %} 
+                <tr>
+                    <th scope="row" class="align-middle text-center">{{m["title"]}}</th>
+                    <td class="align-middle text-center">{{m["description"]}}</td>
+                    <td class="align-middle text-center">{{m["measure"]}}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="row p-3" id="mysqlrecords" style="display:none">
+          <h6 class="text-capitalize text-center col-12 mx-auto">Donnees de MySQL (LONG)</h6>
+          <div class="p-3 col-12">
+            <table class="table table-striped align-items-center mb-0">
+              <thead>
+                <tr>
+                  <th scope="col" class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" style="width:5%">ID</th>
+                  <th scope="col" class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" style="width:10%">Nom</th>
+                  <th scope="col" class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" style="width:15%">Type</th>
+                  <th scope="col" class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" style="width:5%">Status</th>
+                  <th scope="col" class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" style="width:15%">Date</th>
+                  <th scope="col" class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" style="width:50%">Token</th>
+                </tr>
+              </thead>
+              <tbody> 
+                {% for r in mysql_records %} 
+                <tr>
+                    <th scope="row" class="align-middle text-center">{{r["id"]}}</th>
+                    <td class="align-middle text-center">{{r["nom"]}}</td>
+                    <td class="align-middle text-center">{{r["type_obj"]}}</td>
+                    <td class="align-middle text-center">{{r["status_reg"]}}</td>
+                    <td class="align-middle text-center">{{r["date_reg"]}}</td>
+                    <td class="align-middle text-center">{{r["token"]}}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="row p-3" id="mysqlmetrics" style="display:none">
+          <h6 class="text-capitalize text-center col-12 mx-auto">Metrics de MySQL (LONG)</h6>
+          <div class="p-3 col-12">
+            <table class="table table-striped align-items-center mb-0">
+              <thead>
+                <tr>
+                 
+                  <th scope="col" class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" style="width:10%">ID</th>
+                  <th scope="col" class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" style="width:30%">Page</th>
+                  <th scope="col" class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" style="width:40%">Date</th>
+                  <th scope="col" class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" style="width:20%">Duree (microSec)</th>
+                </tr>
+              </thead>
+              <tbody> 
+                {% for m in mysql_metrics %} 
+                <tr>
+                    <th scope="row" class="align-middle text-center">{{m["id"]}}</th>
+                    <td class="align-middle text-center">{{m["access_page"]}}</td>
+                    <td class="align-middle text-center">{{m["access_date"]}}</td>
+                    <td class="align-middle text-center">{{m["access_duration"]}}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+  <script type="text/javascript" src="{{ url_for('static', filename='script.js') }}"></script>
+  <script src="/static/assets/js/plugins/chartjs.min.js"></script>
+  <script>
+    function display(id) {
+      var x = document.getElementById(id);
+      if (x.style.display === "none") {
+        x.style.display = "inline-flex";
+      } else {
+        x.style.display = "none";
+      }
+    }
+  </script>
+
+{% endblock javascripts %}

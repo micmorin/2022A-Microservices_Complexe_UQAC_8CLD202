@@ -1,8 +1,9 @@
 from queue import Empty
-from models import User, Profil, Calcul
+from models import User, Profil, Object, Metrics
 from flask import jsonify, request
 from werkzeug.security import check_password_hash, generate_password_hash
 from database_init import SessionLocal
+from datetime import datetime
 
 ########
 # MAIN #
@@ -125,30 +126,71 @@ def profil_delete():
         return jsonify({"message":'Un probleme est survenu.'}), 400     
 
 ##########
-# CALCUL #
+# Object #
 ##########
 
-def calcul_index():
+def object_index():
     with SessionLocal.begin() as db:
-        data = request.get_json()
-        calculs = db.query(Calcul).filter_by(user_id=data["user_id"]).all()
-        if calculs is Empty:
-            return jsonify({"message":"no calculs found"}), 404
+        objets = db.query(Object).order_by(Object.status_reg).order_by(Object.nom).all()
+        if objets is Empty:
+            return jsonify({"message":"no objets found"}), 404
         else:
-            calculs_obj = []
-            for c in calculs:
-                calculs_obj.append(c.to_json())
-            return jsonify({"message":"ok", "data": calculs_obj}), 200
+            objets_obj = []
+            for o in objets:
+                objets_obj.append(o.to_json())
+            return jsonify({"message":"ok", "data": objets_obj}), 200
 
-def calcul_delete():
+def object_create():           
     try:
         with SessionLocal.begin() as db:
             data = request.get_json()
-            calcul = db.query(Calcul).filter_by(id=data["id"]).first()
-            if calcul.user_id == data["user_id"]:
-                db.session.delete(calcul)
-                return jsonify({"message":"Le profil a ete supprime!"}), 200
-            else:
-                return jsonify({"message":'Acces Interdit.'}), 501  
+            new_object = Object(
+                nom = data['type'],
+                token = generate_password_hash(data['type']),
+                type_obj = data['type'],
+                date_reg = datetime.now(),
+                status_reg = 0 
+                )
+            db.add(new_object)
+            return jsonify({"message":'Objet ajoute!', 'data':new_object.to_json()}), 200
+    except Exception as e:
+        return jsonify({"message": e }), 400   
+
+def object_update():
+    try:
+        with SessionLocal.begin() as db:
+            data = request.get_json()
+            profil = db.query(Object).filter_by(id=data["id"]).first()
+            profil.nom = data['nom']
+            profil.status_reg = data['status']
+            return jsonify({"message":"Le profil a ete mis a jour"}), 200
     except:
         return jsonify({"message":'Un probleme est survenu.'}), 400   
+
+###########
+# Metrics #
+###########
+
+def main_metrics_index():
+    with SessionLocal.begin() as db:
+        metrics = db.query(Metrics).order_by(Metrics.access_page).all()
+        if metrics is Empty:
+            return jsonify({"message":"no metrics found", "data":"No data"}), 400
+        else:
+            metrics_obj = []
+            for m in metrics:
+                metrics_obj.append(m.to_json())
+            return jsonify({"message":"ok", "data": metrics_obj}), 200
+
+def main_metrics_create():
+    try:
+        with SessionLocal.begin() as db:
+            data = request.get_json()
+            new_metrics = Metrics(
+                access_page = data['access_page'],
+                access_duration = data['access_duration']
+                )
+            db.add(new_metrics)
+            return jsonify({"message":'Metrics ajoute!'}), 200
+    except Exception as e:
+        return jsonify({"message": e }), 400

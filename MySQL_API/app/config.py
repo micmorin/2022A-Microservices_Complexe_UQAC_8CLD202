@@ -4,7 +4,7 @@ basedir = path.abspath(path.dirname(__file__))
 
 class Config:
     STATIC_FOLDER = 'static'
-    TEMPLATES_FOLDER = '/templates'
+    TEMPLATES_FOLDER = '/main/templates'
     FLASK_APP = 'run.py'
     SECRET_KEY = "super secret key"
 
@@ -13,16 +13,15 @@ class ProdConfig(Config):
     FLASK_ENV = 'production'
     DEBUG = False
     TESTING = False
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///storage.db'
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 class DevConfig(Config):
     FLASK_ENV = 'development'
     DEBUG = True
     TESTING = True
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///storage.db'
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
 
-class DB():
-    MySQL_API_URL='http://mysql_api:5000'
-    IoT_API_URL='http://iot_api:5000'
-
-
-
-
+class DB:
+    URL = 'mysql_db'

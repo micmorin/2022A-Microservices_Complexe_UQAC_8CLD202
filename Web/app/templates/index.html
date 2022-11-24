@@ -16,261 +16,77 @@
     </div>
     {% endif %} 
 {% endwith %}
-    <div class="container-fluid py-4">
+<div class="container-fluid py-4">
+  <div class="row">
+    <div class="col-12">
+      <div class="card my-4">
+        <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+          <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
+            <h6 class="text-white text-capitalize ps-3">Liste des objets</h6>
+          </div>
+        </div>
+        <div class="row px-3">
+        {% for o in objects %}
+            <div class="col-12 col-sm-6 col-lg-3 py-3">
+              <div class="card text-center">
+                <div class="card-header">{{o.type_obj}}</div>
+                <div class="card-body">
+                  <h5 style="font-size: 48px" class="d-flex justify-content-center material-icons opacity-10">
+                    {% if o.type_obj == "Camera" %} videocam 
+                    {% elif o.type_obj == "Sonde_Niveau_Eau" %}water_drop
+                    {% else %}sensors{% endif %}  
+                  </h5>
+                  <h5 class="card-title">{{o.nom}}</h5>
+                  <p class="card-text">Status: 
+                    {% if o.status_reg == 0 %}<b style="color:#b54800;">Nouveau</b>
+                    {% elif o.status_reg == 2 %}<i style="color:#007cb5;">Désactivé</i>
+                    {% else %}Activé{% endif %}</p>
+                  <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modify_{{o.id}}">Modifier</button>
+                </div>
+                <div class="card-footer text-muted">Date d'enregistrement:</br>{{o.date_reg}}</div>
+              </div>
+            </div>
+            <div class="modal fade" id="modify_{{o.id}}" tabindex="-1" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title">Modifier un objet</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                    <form action="{{url_for('object.object_update', object_id=o.id)}}" method="post" id="form_updateObject_{{o.id}}">
+                      <div class="row"><input type="hidden" id="type_obj" name="type_obj" value="{{o.type_obj}}">
+                      <div class="col-6 my-1 text-align-center">Nom:</div>
+                      <div class="col-6 my-1 p-0 text-align-center"> <input type="text" id="nom" name="nom" value="{{o.nom}}"></div>
+                      <div class="col-6 my-1 text-align-center"> Status:</div>
+                      <div class="col-6 my-1 p-0 text-align-center">
+                        <input type="radio" id="status_New_{{o.id}}" name="status_radio_{{o.id}}" value="0" {% if o.status_reg == 0 %}checked{% endif %}>
+                        <label for="status_New">Nouveau </label></br>
+                        <input type="radio" id="status_Confirmed_{{o.id}}" name="status_radio_{{o.id}}" value="1" {% if o.status_reg == 1 %}checked{% endif %}>
+                        <label for="status_Confirmed">Activé</label></br>
+                        <input type="radio" id="status_Confirmed_{{o.id}}" name="status_radio_{{o.id}}" value="2" {% if o.status_reg == 2 %}checked{% endif %}>
+                        <label for="status_Confirmed">Désactivé</label></br>
+                      </div>
+                    </form>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                    <button type="submit" class="btn btn-primary" form="form_updateObject_{{o.id}}">Sauvegarder</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+        </div>
+      </div>
     </div>
+  </div>
+</div> 
 {% endblock content %}
 
 <!-- Specific Page JS goes HERE  -->
 {% block javascripts %}
-
   <script type="text/javascript" src="{{ url_for('static', filename='script.js') }}"></script>
   <script src="/static/assets/js/plugins/chartjs.min.js"></script>
-  <script>
-    var ctx = document.getElementById("chart-bars").getContext("2d");
-
-    new Chart(ctx, {
-      type: "bar",
-      data: {
-        labels: ["M", "T", "W", "T", "F", "S", "S"],
-        datasets: [{
-          label: "Sales",
-          tension: 0.4,
-          borderWidth: 0,
-          borderRadius: 4,
-          borderSkipped: false,
-          backgroundColor: "rgba(255, 255, 255, .8)",
-          data: [50, 20, 10, 22, 50, 10, 40],
-          maxBarThickness: 6
-        }, ],
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: {
-            display: false,
-          }
-        },
-        interaction: {
-          intersect: false,
-          mode: 'index',
-        },
-        scales: {
-          y: {
-            grid: {
-              drawBorder: false,
-              display: true,
-              drawOnChartArea: true,
-              drawTicks: false,
-              borderDash: [5, 5],
-              color: 'rgba(255, 255, 255, .2)'
-            },
-            ticks: {
-              suggestedMin: 0,
-              suggestedMax: 500,
-              beginAtZero: true,
-              padding: 10,
-              font: {
-                size: 14,
-                weight: 300,
-                family: "Roboto",
-                style: 'normal',
-                lineHeight: 2
-              },
-              color: "#fff"
-            },
-          },
-          x: {
-            grid: {
-              drawBorder: false,
-              display: true,
-              drawOnChartArea: true,
-              drawTicks: false,
-              borderDash: [5, 5],
-              color: 'rgba(255, 255, 255, .2)'
-            },
-            ticks: {
-              display: true,
-              color: '#f8f9fa',
-              padding: 10,
-              font: {
-                size: 14,
-                weight: 300,
-                family: "Roboto",
-                style: 'normal',
-                lineHeight: 2
-              },
-            }
-          },
-        },
-      },
-    });
-
-
-    var ctx2 = document.getElementById("chart-line").getContext("2d");
-
-    new Chart(ctx2, {
-      type: "line",
-      data: {
-        labels: ["Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-        datasets: [{
-          label: "Mobile apps",
-          tension: 0,
-          borderWidth: 0,
-          pointRadius: 5,
-          pointBackgroundColor: "rgba(255, 255, 255, .8)",
-          pointBorderColor: "transparent",
-          borderColor: "rgba(255, 255, 255, .8)",
-          borderColor: "rgba(255, 255, 255, .8)",
-          borderWidth: 4,
-          backgroundColor: "transparent",
-          fill: true,
-          data: [50, 40, 300, 320, 500, 350, 200, 230, 500],
-          maxBarThickness: 6
-
-        }],
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: {
-            display: false,
-          }
-        },
-        interaction: {
-          intersect: false,
-          mode: 'index',
-        },
-        scales: {
-          y: {
-            grid: {
-              drawBorder: false,
-              display: true,
-              drawOnChartArea: true,
-              drawTicks: false,
-              borderDash: [5, 5],
-              color: 'rgba(255, 255, 255, .2)'
-            },
-            ticks: {
-              display: true,
-              color: '#f8f9fa',
-              padding: 10,
-              font: {
-                size: 14,
-                weight: 300,
-                family: "Roboto",
-                style: 'normal',
-                lineHeight: 2
-              },
-            }
-          },
-          x: {
-            grid: {
-              drawBorder: false,
-              display: false,
-              drawOnChartArea: false,
-              drawTicks: false,
-              borderDash: [5, 5]
-            },
-            ticks: {
-              display: true,
-              color: '#f8f9fa',
-              padding: 10,
-              font: {
-                size: 14,
-                weight: 300,
-                family: "Roboto",
-                style: 'normal',
-                lineHeight: 2
-              },
-            }
-          },
-        },
-      },
-    });
-
-    var ctx3 = document.getElementById("chart-line-tasks").getContext("2d");
-
-    new Chart(ctx3, {
-      type: "line",
-      data: {
-        labels: ["Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-        datasets: [{
-          label: "Mobile apps",
-          tension: 0,
-          borderWidth: 0,
-          pointRadius: 5,
-          pointBackgroundColor: "rgba(255, 255, 255, .8)",
-          pointBorderColor: "transparent",
-          borderColor: "rgba(255, 255, 255, .8)",
-          borderWidth: 4,
-          backgroundColor: "transparent",
-          fill: true,
-          data: [50, 40, 300, 220, 500, 250, 400, 230, 500],
-          maxBarThickness: 6
-
-        }],
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: {
-            display: false,
-          }
-        },
-        interaction: {
-          intersect: false,
-          mode: 'index',
-        },
-        scales: {
-          y: {
-            grid: {
-              drawBorder: false,
-              display: true,
-              drawOnChartArea: true,
-              drawTicks: false,
-              borderDash: [5, 5],
-              color: 'rgba(255, 255, 255, .2)'
-            },
-            ticks: {
-              display: true,
-              padding: 10,
-              color: '#f8f9fa',
-              font: {
-                size: 14,
-                weight: 300,
-                family: "Roboto",
-                style: 'normal',
-                lineHeight: 2
-              },
-            }
-          },
-          x: {
-            grid: {
-              drawBorder: false,
-              display: false,
-              drawOnChartArea: false,
-              drawTicks: false,
-              borderDash: [5, 5]
-            },
-            ticks: {
-              display: true,
-              color: '#f8f9fa',
-              padding: 10,
-              font: {
-                size: 14,
-                weight: 300,
-                family: "Roboto",
-                style: 'normal',
-                lineHeight: 2
-              },
-            }
-          },
-        },
-      },
-    });
-  </script>
-
 {% endblock javascripts %}

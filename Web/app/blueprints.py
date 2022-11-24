@@ -21,7 +21,17 @@ profil.route('/create',                         methods=['POST'])           (c.p
 profil.route('/edit/<int:profil_id>',           methods=['POST'])           (c.profil_update)
 profil.route('/<int:profil_id>',                methods=['POST'])           (c.profil_destroy)
 
-calcul = Blueprint('calcul', __name__,url_prefix="/calculs")
+object = Blueprint('object', __name__,url_prefix="/objects")
 
-calcul.route('/',                               methods=['GET'])            (c.calcul_index)
-calcul.route('/<int:calcul_id>',                methods=['POST'])           (c.calcul_destroy)
+object.route('/create',                         methods=['POST'])           (c.object_create)
+object.route('/edit/<int:object_id>',           methods=['POST'])           (c.object_update)
+
+simulator = Blueprint('simulator', __name__,url_prefix="/simulator")
+
+simulator.route('/',                            methods=['GET'])            (c.simulator_index)
+simulator.route('/create',                      methods=['POST'])           (c.simulator_create)
+
+analytics = Blueprint('analytics', __name__,url_prefix="/analytics")
+
+analytics.route('/',                            methods=['GET'])            (c.analytics_index)
+analytics.route('/delete',                       methods=['POST'])          (c.analytics_delete)

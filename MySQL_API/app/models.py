@@ -1,5 +1,5 @@
 from database_init import Base
-from sqlalchemy import Column, ForeignKey, Integer, String, Date
+from sqlalchemy import Column, ForeignKey, Integer, String, Date, TIMESTAMP, FetchedValue
 from sqlalchemy.orm import relationship
 
 
@@ -52,21 +52,40 @@ class Profil (Base):
         return {"id":self.id,
                 "description":self.description}
 
-class Calcul(Base):
-    __tablename__ = "calcul"
+class Object (Base):
+    __tablename__ = "objet_registration"
 
     id = Column(Integer, primary_key=True)
-    body = Column(String(120), nullable=False)
-    result = Column(Integer)
-    date = Column(Date, nullable=False)
-    user_id = Column(Integer, ForeignKey('user.id'), nullable=False)
-    
+    nom = Column(String(120), unique=True, nullable=False)
+    token = Column(String(120), unique=True, nullable=False)
+    type_obj = Column(String(120), nullable=False)
+    date_reg = Column(Date(), nullable=False)
+    status_reg = Column(Integer, nullable=False)
 
     def __repr__(self):
-        return '<Calcul %r>' % self.name
+        return '<Objet %r>' % self.type_obj
 
     def to_json(self):
         return {"id":self.id,
-                "description":self.body+" = "+ str(self.result),
-                "date":self.date,
-                "user_id":self.user_id}
+                "nom":self.nom,
+                "token":self.token,
+                "type_obj":self.type_obj,
+                "date_reg":self.date_reg,
+                "status_reg":self.status_reg }
+
+class Metrics (Base):
+    __tablename__ = "metrics"
+
+    id = Column(Integer, primary_key=True)
+    access_date = Column(TIMESTAMP, nullable=False, server_default=FetchedValue())
+    access_page = Column(String(120), nullable=False)
+    access_duration = Column(Integer, nullable=False)
+
+    def __repr__(self):
+        return '<Metrics %r>' % self.id
+
+    def to_json(self):
+        return {"id":self.id,
+                "access_date":self.access_date,
+                "access_page":self.access_page,
+                "access_duration":self.access_duration}

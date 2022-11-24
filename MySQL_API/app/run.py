@@ -1,5 +1,5 @@
 from flask import Flask
-from blueprints import main, user, profil, calcul
+from blueprints import main, user, profil, object
 import database_init
 
 if __name__ == "__main__":
@@ -11,7 +11,7 @@ if __name__ == "__main__":
     app.register_blueprint(main)
     app.register_blueprint(user)
     app.register_blueprint(profil)
-    app.register_blueprint(calcul)
+    app.register_blueprint(object)
     
     # Start Server
     app.run(host='0.0.0.0',port=5000)
