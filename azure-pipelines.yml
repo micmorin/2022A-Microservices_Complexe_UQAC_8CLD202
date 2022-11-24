@@ -19,21 +19,4 @@ stages:
     pool:
       vmImage: ubuntu-latest
     steps:
-      - script: /usr/bin/docker pull python:3.8-slim
-      - task: Docker@2
-        inputs:
-          containerRegistry: 'Docker Hub'
-          repository: '8cld202'
-          command: 'build'
-          Dockerfile: 'Web/Dockerfile'
-          tags: 'web'
-      - task: Docker@2
-        inputs:
-          containerRegistry: 'Docker Hub'
-          command: 'login'
-      - task: Docker@2
-        inputs:
-          containerRegistry: 'Docker Hub'
-          repository: 'micmunger/8cld202'
-          command: 'push'
-          tags: '8cld202:web'
+      - script: /usr/bin/docker build -f /home/vsts/work/1/s/Web/Dockerfile -t 8cld202:web /home/vsts/work/1/s/Web
