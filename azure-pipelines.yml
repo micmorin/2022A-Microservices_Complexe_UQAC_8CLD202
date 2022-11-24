@@ -20,17 +20,10 @@ stages:
     pool:
       vmImage: ubuntu-latest
     steps:
-      - task: DockerCompose@0
+      - task: Docker@2
         inputs:
-          containerregistrytype: 'Container Registry'
-          dockerRegistryEndpoint: 'Docker Hub'
-          dockerComposeFile: '**/docker-compose.yml'
-          action: 'Build services'
-      - task: CopyFiles@2
-        displayName: 'Copy Files to artifact staging directory'
-        inputs:
-          SourceFolder: '$(System.DefaultWorkingDirectory)'
-          Contents: '**/target/*.?(war|jar)'
-          TargetFolder: $(Build.ArtifactStagingDirectory)
-      - upload: $(Build.ArtifactStagingDirectory)
-        artifact: drop
+          containerRegistry: 'Docker Hub'
+          repository: '8cld202'
+          command: 'buildAndPush'
+          Dockerfile: 'Web/Dockerfile'
+          tags: 'web'
