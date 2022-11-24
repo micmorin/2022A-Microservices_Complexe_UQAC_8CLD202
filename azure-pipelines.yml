@@ -26,10 +26,11 @@ stages:
           dockerRegistryEndpoint: 'Docker Hub'
           dockerComposeFile: '**/docker-compose.yml'
           action: 'Build services'
-      - task: DockerCompose@0
+      - task: CopyFiles@2
+        displayName: 'Copy Files to artifact staging directory'
         inputs:
-          containerregistrytype: 'Container Registry'
-          dockerRegistryEndpoint: 'Docker Hub'
-          dockerComposeFile: '**/docker-compose.yml'
-          condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
-          action: 'Push services'
+          SourceFolder: '$(System.DefaultWorkingDirectory)'
+          Contents: '**/target/*.?(war|jar)'
+          TargetFolder: $(Build.ArtifactStagingDirectory)
+      - upload: $(Build.ArtifactStagingDirectory)
+        artifact: drop
