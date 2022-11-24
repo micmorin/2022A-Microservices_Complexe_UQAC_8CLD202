@@ -35,4 +35,4 @@ stages:
           containerRegistry: 'Docker Hub'
           repository: 'micmunger/8cld202'
           command: 'push'
-          tags: 'web'
+          tags: '8cld202:web'
