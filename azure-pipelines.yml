@@ -19,6 +19,7 @@ stages:
     pool:
       vmImage: ubuntu-latest
     steps:
+      - script: echo "I can run inside the container (it starts by default)"
       - task: Docker@2
         inputs:
           containerRegistry: 'Docker Hub'
