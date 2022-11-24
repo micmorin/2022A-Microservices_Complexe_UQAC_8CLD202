@@ -31,4 +31,5 @@ stages:
           containerregistrytype: 'Container Registry'
           dockerRegistryEndpoint: 'Docker Hub'
           dockerComposeFile: '**/docker-compose.yml'
+          condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
           action: 'Push services'
