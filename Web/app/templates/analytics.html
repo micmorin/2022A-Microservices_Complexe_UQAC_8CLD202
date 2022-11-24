@@ -29,7 +29,7 @@
           {% for obj in summary %}
           <h5 class="mt-5 text-capitalize text-center col-12 mx-auto">{{obj.title}}</h5>
             {% for x in range(obj.data|length) %}
-              <div class="col-3 p-3"><div class=" card bg-{{x%6}} p-3"><p>{{obj.data[x].title}}</p><h5 class="text-center">{{obj.data[x].data}}</h5></div></div>
+              <div class="col-3 p-3"><div class=" card bg-{{x%6}} p-3"><p>{{obj.data[x].title}}</p><h5 class="text-center">{{obj.data[x].data|float|round(2, 'floor')}}</h5></div></div>
             {% endfor %}
           {% endfor %}
         </div>

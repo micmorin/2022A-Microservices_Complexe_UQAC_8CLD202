@@ -80,10 +80,10 @@ def data_create():
         obj = Object(data['nom'], data['type'])
         obj.add_data(session, data['measures'])
         session.close()
-        return jsonify({'message':'SUCCESS - Added data '+ data['measures']+' for '+data['nom']}), 200
+        return jsonify({'message':'SUCCESS - Added data '+ ' '.join(str(e)+' ' for e in data['measures']) +' for '+data['nom']}), 200
     except Exception as e:
         session.close()
-        return jsonify({'message':'FAILURE - Unable to add data '+ data['measures']+' for '+data['nom']}), 500
+        return jsonify({'message':'FAILURE - Unable to add data '+ ' '.join(str(e)+' ' for e in data['measures']) +' for '+data['nom']}), 500
 
 def data_delete(): 
     data = request.get_json()
