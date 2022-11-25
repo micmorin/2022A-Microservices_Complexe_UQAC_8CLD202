@@ -21,7 +21,7 @@ class DevConfig(Config):
 
 class DB():
     MySQL_API_URL='http://20.48.237.189:5000'
-    IoT_API_URL='http://iot_api:5000'
+    IoT_API_URL='http://20.104.197.37:5000'
 
 
 
