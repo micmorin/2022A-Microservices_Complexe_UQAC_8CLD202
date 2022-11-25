@@ -20,7 +20,7 @@ class DevConfig(Config):
     TESTING = True
 
 class DB():
-    MySQL_API_URL='http://mysql_api:5000'
+    MySQL_API_URL='http://20.48.237.189:5000'
     IoT_API_URL='http://iot_api:5000'
 
 
