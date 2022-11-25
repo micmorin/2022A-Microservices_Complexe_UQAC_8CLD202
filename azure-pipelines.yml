@@ -19,7 +19,7 @@ stages:
     pool:
       vmImage: ubuntu-latest
     steps:
-      - script: /usr/bin/docker build --pull -t micmunger/8cld202:web ./SWARM/web && /usr/bin/docker login -u $(username) -p $(password) docker.io && /usr/bin/docker push micmunger/8cld202:web
+      - script: /usr/bin/docker build --pull -t micmunger/8cld202:web -f /SWARM/web/Dockerfile && /usr/bin/docker login -u $(username) -p $(password) docker.io && /usr/bin/docker push micmunger/8cld202:web
         displayName: Build and Push Web
 
       - script: /usr/bin/docker build --pull -t micmunger/8cld202:mysql_db ./MySQL_DB && /usr/bin/docker login -u $(username) -p $(password) docker.io && /usr/bin/docker push micmunger/8cld202:mysql_db
