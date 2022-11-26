@@ -14,6 +14,9 @@ from iotdb.utils.IoTDBConstants import TSDataType, TSEncoding, Compressor
 ########
 
 def main_register():
+    if DB.need_init:
+        init_db()
+        DB.need_init = False
     data = request.get_json()
     response = requests.post( DB.MySQL_API_URL+'/objects/create', 
         data=json.dumps( {"type":data['type']}), 
@@ -29,6 +32,9 @@ def main_register():
         return jsonify({'data':response.json()['message']}), response.status_code
 
 def main_confirm():
+    if DB.need_init:
+        init_db()
+        DB.need_init = False
     data = request.get_json()
     try :
         session.open(False)
@@ -53,6 +59,9 @@ def main_init():
     return jsonify(),200
 
 def main_analytics():
+    if DB.need_init:
+        init_db()
+        DB.need_init = False
     session.open(False)
     resultats = Analytics(session)
     session.close()
