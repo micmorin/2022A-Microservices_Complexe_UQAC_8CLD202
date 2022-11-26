@@ -112,7 +112,6 @@ stages:
                   /usr/bin/docker swarm init --advertise-addr 4.205.16.41;
                 fi;
             - bash: echo "##vso[task.setvariable variable=myOutputVar;isOutput=true]$( /usr/bin/docker swarm join-token -q worker )"
-              name: setvarStep
             - bash: echo "##vso[task.setvariable variable=myOutputVar;isOutput=true]this is the deployment variable value"
               name: setvarStep
             - bash: echo $(setvarStep.myOutputVar)
