@@ -107,8 +107,8 @@ stages:
       runOnce:
         deploy:   
             steps:
-            - script: 
-              "if[\"$(/usr/bin/docker info --format '{{.Swarm.LocalNodeState}}')\" == 'active')]
+            - bash: |
+              if[\"$(/usr/bin/docker info --format '{{.Swarm.LocalNodeState}}')\" == 'active')];
               then
-                echo $(/usr/bin/docker swarm join-token -q worker)
-              fi"
+                echo $(/usr/bin/docker swarm join-token -q worker);
+              fi;
