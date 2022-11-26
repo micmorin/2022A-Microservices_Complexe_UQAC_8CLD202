@@ -12,39 +12,69 @@ variables:
 
 stages:
 - stage: Build
-  displayName: Build image
+  displayName: Build and Push to Docker Hub
   jobs:
-  - job: Build
-    displayName: Build
+  - job: Build_Web
+    displayName: Build and Push Web
     pool:
       vmImage: ubuntu-latest
     steps:
-      - script: /usr/bin/docker build --pull -t micmunger/8cld202:web -f ./SWARM/web/Dockerfile ./ && /usr/bin/docker login -u $(username) -p $(password) docker.io && /usr/bin/docker push micmunger/8cld202:web
-        displayName: Build and Push Web
+      - script: /usr/bin/docker build --pull -t micmunger/8cld202:web -f ./SWARM/web/Dockerfile ./
+        displayName: Build
+      - script: /usr/bin/docker login -u $(username) -p $(password) docker.io && /usr/bin/docker push micmunger/8cld202:web
+        displayName: Push  
+  
+  - job: Build_MySQL_API
+    displayName: Build and Push MySQL_API
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+      - script: /usr/bin/docker build --pull -t micmunger/8cld202:mysql_api -f ./SWARM/mysql_api/Dockerfile ./
+        displayName: Build
+      - script: /usr/bin/docker login -u $(username) -p $(password) docker.io && /usr/bin/docker push micmunger/8cld202:mysql_api
+        displayName: Push
 
-      - script: /usr/bin/docker build --pull -t micmunger/8cld202:mysql_api -f ./SWARM/mysql_api/Dockerfile ./ && /usr/bin/docker login -u $(username) -p $(password) docker.io && /usr/bin/docker push micmunger/8cld202:mysql_api
-        displayName: Build and Push MySQL_API
-
+  - job: Build_IoT_API
+    displayName: Build and Push IoT_API
+    pool:
+      vmImage: ubuntu-latest
+    steps:
       - script: /usr/bin/docker build --pull -t micmunger/8cld202:iot_api -f ./SWARM/iot_api/Dockerfile ./ && /usr/bin/docker login -u $(username) -p $(password) docker.io && /usr/bin/docker push micmunger/8cld202:iot_api
-        displayName: Build and Push IoT_API
-
-      - script: /usr/bin/docker build --pull -t micmunger/8cld202:mysql_db ./MySQL_DB && /usr/bin/docker login -u $(username) -p $(password) docker.io && /usr/bin/docker push micmunger/8cld202:mysql_db
-        displayName: Build and Push MySQL_DB
-      
-      - script: /usr/bin/docker build --pull -t micmunger/8cld202:iot_db ./IoT_DB && /usr/bin/docker login -u $(username) -p $(password) docker.io && /usr/bin/docker push micmunger/8cld202:iot_db
-        displayName: Build and Push IoT_DB
+        displayName: Build
+      - script: /usr/bin/docker build --pull -t micmunger/8cld202:iot_api -f ./SWARM/iot_api/Dockerfile ./ && /usr/bin/docker login -u $(username) -p $(password) docker.io && /usr/bin/docker push micmunger/8cld202:iot_api
+        displayName: Push
+  
+  - job: Build_MySQL_DB
+    displayName: Build and Push MySQL_DB
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+      - script: /usr/bin/docker build --pull -t micmunger/8cld202:mysql_db ./MySQL_DB 
+        displayName: Build
+      - script: /usr/bin/docker login -u $(username) -p $(password) docker.io && /usr/bin/docker push micmunger/8cld202:mysql_db
+        displayName: Push
+  
+  - job: Build_IoT_DB
+    displayName: Build and Push IoT_DB
+    pool:
+      vmImage: ubuntu-latest
+    steps:  
+      - script: /usr/bin/docker build --pull -t micmunger/8cld202:iot_db ./IoT_DB 
+        displayName: Build
+      - script: /usr/bin/docker login -u $(username) -p $(password) docker.io && /usr/bin/docker push micmunger/8cld202:iot_db
+        displayName: Push
 
 - stage: Start
   displayName: Start Azure VMs
   jobs:
   - job: Start
-    displayName: Start Azure VMs
+    displayName: Start Master-MySQL
     pool:
       vmImage: ubuntu-latest
     steps:      
     - task: AzureCLI@2
       inputs:
         azureSubscription: 'Azure subscription 1(1aab54f1-babe-4322-95b4-185df45b9d75)'
-        scriptType: 'ps'
+        scriptType: 'bash'
         scriptLocation: 'inlineScript'
-        inlineScript: 'Start-AzVM -ResourceGroupName CLD202 -Name Master-MySQL'
+        inlineScript: 'az vm start --resource-group CLD202 --name Worker-IoT --subscription 1aab54f1-babe-4322-95b4-185df45b9d75'
