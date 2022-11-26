@@ -120,7 +120,7 @@ stages:
     displayName: Swarm init on Worker
     dependsOn: masterSwarm
     variables:
-      myVarFromDeploymentJob: $[ dependencies.Docker.masterSwarm.outputs['setvarStep.myOutputVar'] ]
+      myVarFromDeploymentJob: $[ dependencies.masterSwarm.outputs['setvarStep.myOutputVar'] ]
     environment: 
       name: Azure Swarm
       resourceType: VirtualMachine
@@ -136,3 +136,10 @@ stages:
                 /usr/bin/docker swarm join --token $(masterToken)  4.205.16.41:2377;
                 fi;
                 echo $(myVarFromJobA)
+  - job: B
+    dependsOn: masterSwarm
+    variables:
+      myVarFromDeploymentJob: $[ dependencies.masterSwarm.outputs['setvarStep.myOutputVar'] ]
+    steps:
+    - bash: |
+        echo $(myVarFromDeploymentJob)
