@@ -155,11 +155,11 @@ stages:
 
 # Map the variable from the job.
   - job: B
-    dependsOn: masterSwarm
+    dependsOn: A
     pool:
       vmImage: 'ubuntu-latest'
     variables:
-      myVarFromDeploymentJob: $[ dependencies.masterSwarm.outputs['masterSwarm.setvarStep.myOutputVar'] ]
+      myVarFromDeploymentJob: $[ dependencies.A.outputs['A.setvarStep.myOutputVar'] ]
     steps:
     - script: "echo $(myVarFromDeploymentJob)"
       name: echovar
