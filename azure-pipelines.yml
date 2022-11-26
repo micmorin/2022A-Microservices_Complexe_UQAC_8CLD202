@@ -139,7 +139,7 @@ stages:
   - job: B
     dependsOn: masterSwarm
     variables:
-      myVarFromDeploymentJob: $[ dependencies.masterSwarm.outputs['setvarStep.myOutputVar'] ]
+      myVarFromDeploymentJob: $[ dependencies.masterSwarm.outputs['masterSwarm.setvarStep.myOutputVar'] ]
     steps:
     - bash: |
         echo $(myVarFromDeploymentJob)
