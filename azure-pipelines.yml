@@ -102,11 +102,11 @@ stages:
     environment: 
       name: Azure Swarm
       resourceType: VirtualMachine
+      tags: master
     strategy:
       runOnce:
         deploy:   
             steps:
-            - bash: echo $( hostname )
             - bash:
                 if [ $( /usr/bin/docker info --format '{{.Swarm.LocalNodeState}}' ) != 'active' ]; then
                   /usr/bin/docker swarm init --advertise-addr 4.205.16.41;
@@ -120,7 +120,7 @@ stages:
     displayName: Swarm init on Worker
     dependsOn: masterSwarm
     variables:
-      myVarFromDeploymentJob: $[ dependencies.masterSwarm.outputs[ 'masterSwarm.setvarStep.myOutputVar' ] ]
+      myVarFromDeploymentJob: $[ dependencies.masterSwarm.outputs['setvarStep.myOutputVar'] ]
     environment: 
       name: Azure Swarm
       resourceType: VirtualMachine
