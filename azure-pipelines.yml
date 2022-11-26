@@ -91,13 +91,6 @@ stages:
 - stage: Docker
   displayName: Deploy with Docker Swarm
   jobs:
-  - job: Init_Swarm
-    displayName: Initialize swarm
-    steps:
-    - bash: |
-        OUTPUT=$(/usr/bin/docker info --format '{{.Swarm.LocalNodeState}}');
-        echo $OUTPUT;
-
   - deployment: masterSwarmInit
     displayName: Swarm init on Master
     pool:
