@@ -143,7 +143,6 @@ stages:
   - deployment: A
     pool:
       vmImage: 'ubuntu-latest'
-    environment: staging
     strategy:                  
       canary:      
         increments: [10,20]  # Creates multiple jobs, one for each increment. Output variable can be referenced with this.
