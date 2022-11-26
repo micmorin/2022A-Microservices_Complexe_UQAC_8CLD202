@@ -107,8 +107,8 @@ stages:
       runOnce:
         deploy:   
             steps:
-            - bash: |
-                OUTPUT= ` /usr/bin/docker info --format '{{.Swarm.LocalNodeState}}' `;
+            - bash:
+                OUTPUT=`/usr/bin/docker info --format '{{.Swarm.LocalNodeState}}'`;
                 if [$OUTPUT -eq 'active']
                 then
                   echo 'hi'
