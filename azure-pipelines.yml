@@ -97,8 +97,11 @@ stages:
     - bash: |
         OUTPUT=$(/usr/bin/docker info --format '{{.Swarm.LocalNodeState}}');
         echo $OUTPUT;
+
   - deployment: masterSwarm
     displayName: Swarm init on Master
+    pool:
+      vmImage: 'ubuntu-latest'
     environment: 
       name: Azure Swarm
       resourceType: VirtualMachine
@@ -112,7 +115,6 @@ stages:
                   /usr/bin/docker swarm init --advertise-addr 4.205.16.41;
                 fi;
             - bash: echo "##vso[task.setvariable variable=myOutputVar;isOutput=true]$( /usr/bin/docker swarm join-token -q worker )"
-            - bash: echo "##vso[task.setvariable variable=myOutputVar;isOutput=true]this is the deployment variable value"
               name: setvarStep
             - bash: echo $(setvarStep.myOutputVar)
               name: echovar
@@ -136,7 +138,20 @@ stages:
                 if [ $( /usr/bin/docker info --format '{{.Swarm.LocalNodeState}}' ) != 'active' ]; then
                 /usr/bin/docker swarm join --token $(masterToken)  4.205.16.41:2377;
                 fi;
-                echo $(myVarFromJobA)     
+                echo $(myVarFromJobA)
+  # Set an output variable in a lifecycle hook of a deployment job executing runOnce strategy.
+  - deployment: A
+    pool:
+      vmImage: 'ubuntu-latest'
+    environment: staging
+    strategy:                  
+      runOnce:
+        deploy:
+          steps:
+          - bash: echo "##vso[task.setvariable variable=myOutputVar;isOutput=true]this is the deployment variable value"
+            name: setvarStep
+          - bash: echo $(setvarStep.myOutputVar)
+            name: echovar
 
 # Map the variable from the job.
   - job: B
