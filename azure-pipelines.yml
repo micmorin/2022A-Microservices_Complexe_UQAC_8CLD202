@@ -159,7 +159,7 @@ stages:
                   /usr/bin/docker pull micmunger/8cld202:mysql_db;
                   /usr/bin/docker service update --image micmunger/8cld202:mysql_db MySQL_DB;
                 else
-                  /usr/bin/docker service create --name MySQL_DB -p 80:80 --constraint 'node.hostname==Master-MySQL' micmunger/8cld202:mysql_db;
+                  /usr/bin/docker service create --name MySQL_DB -p 3306:3306 --constraint 'node.hostname==Master-MySQL' micmunger/8cld202:mysql_db;
                 fi;
               name: startMySQL_DB
             - bash:
@@ -167,7 +167,7 @@ stages:
                   /usr/bin/docker pull micmunger/8cld202:mysql_api;
                   /usr/bin/docker service update --image micmunger/8cld202:mysql_api MySQL_API;
                 else
-                  /usr/bin/docker service create --name MySQL_API -p 80:80 --constraint 'node.hostname==Master-MySQL' micmunger/8cld202:mysql_api;
+                  /usr/bin/docker service create --name MySQL_API -p 5000:5000 --constraint 'node.hostname==Master-MySQL' micmunger/8cld202:mysql_api;
                 fi;
               name: startMySQL_API
   
@@ -189,14 +189,14 @@ stages:
                   /usr/bin/docker pull micmunger/8cld202:iot_db;
                   /usr/bin/docker service update --image micmunger/8cld202:mysql_db iot_db;
                 else
-                  /usr/bin/docker service create --name IoT_DB -p 80:80 --constraint 'node.hostname==Master-MySQL' micmunger/8cld202:iot_db;
+                  /usr/bin/docker service create --name IoT_DB -p 6667:6667 -p 9091:9091 --constraint 'node.hostname==Master-MySQL' micmunger/8cld202:iot_db;
                 fi;
-              name: startMySQL_DB
+              name: startIoT_DB
             - bash:
                 if [ $( /usr/bin/docker service ls -f name=IoT_API --format '{{.Name}}' ) == 'IoT_API' ]; then
                   /usr/bin/docker pull micmunger/8cld202:iot_api;
                   /usr/bin/docker service update --image micmunger/8cld202:iot_api IoT_API;
                 else
-                  /usr/bin/docker service create --name IoT_API -p 80:80 --constraint 'node.hostname==Master-MySQL' micmunger/8cld202:iot_api;
+                  /usr/bin/docker service create --name IoT_API -p 5011:5000 --constraint 'node.hostname==Master-MySQL' micmunger/8cld202:iot_api;
                 fi;
-              name: startMySQL_API
+              name: startIoT_API
