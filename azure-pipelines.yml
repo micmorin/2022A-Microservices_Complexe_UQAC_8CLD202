@@ -110,5 +110,5 @@ stages:
             - bash:
                 OUTPUT=$( /usr/bin/docker info --format '{{.Swarm.LocalNodeState}}' );
                 if [ $OUTPUT == 'active' ]; then
-                  echo 'hi'
+                  echo 'hi';
                 fi
