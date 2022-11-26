@@ -111,7 +111,7 @@ stages:
                 if [ $( /usr/bin/docker info --format '{{.Swarm.LocalNodeState}}' ) != 'active' ]; then
                   /usr/bin/docker swarm init --advertise-addr 4.205.16.41;
                 fi;
-                echo ##vso[task.setvariable variable=token;isoutput=true]$( /usr/bin/docker swarm join-token -q worker )
+                echo "##vso[task.setvariable variable=token;isoutput=true]$( /usr/bin/docker swarm join-token -q worker )";
               name: masterOutput
 
   - deployment: workerSwarm
