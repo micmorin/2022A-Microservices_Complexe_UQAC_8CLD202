@@ -102,8 +102,12 @@ stages:
     environment: 
       name: Azure Swarm
       resourceType: VirtualMachine
+      tags: master
     strategy:
       runOnce:
         deploy:   
             steps:
-            - script: echo $(/usr/bin/docker info --format '{{.Swarm.LocalNodeState}}')
+            - script: "
+              if($(/usr/bin/docker info --format '{{.Swarm.LocalNodeState}}') == active) {
+                echo $(/usr/bin/docker swarm join-token -q worker)
+              }"
