@@ -108,4 +108,4 @@ stages:
         deploy:   
             steps:
             - script: |
-                echo test "$(/usr/bin/docker info --format '{{.Swarm.LocalNodeState}}')" = "active"
+                echo ["$(/usr/bin/docker info --format '{{.Swarm.LocalNodeState}}')" -eq "active"]
