@@ -114,16 +114,16 @@ stages:
                 if [ $( /usr/bin/docker info --format '{{.Swarm.LocalNodeState}}' ) != 'active' ]; then
                   /usr/bin/docker swarm init --advertise-addr 4.205.16.41;
                 fi;
-            - bash: echo "##vso[task.setvariable variable=myOutputVar;isOutput=true]$( /usr/bin/docker swarm join-token -q worker )"
-              name: setvarStep
-            - bash: echo $(setvarStep.myOutputVar)
-              name: echovar
+              name: conditionnalSwarmInit
+            - bash: echo "##vso[task.setvariable variable=token;isOutput=true]$( /usr/bin/docker swarm join-token -q worker )"
+              name: setOutputStep
 
   - deployment: workerSwarm
-    displayName: Swarm init on Worker
+    displayName: Swarm join on Worker
     dependsOn: masterSwarm
     variables:
-      myVarFromDeploymentJob: $[ dependencies.masterSwarm.outputs['Deploy_Master-MySQL.setvarStep.myOutputVar'] ]
+            #$[dependencies.<job-name>.outputs['<lifecycle-hookname>_<resource-name>.<step-name>.<variable-name>']]
+      token: $[ dependencies.masterSwarm.outputs['Deploy_Master-MySQL.setOutputStep.token'] ]
     environment: 
       name: Azure Swarm
       resourceType: VirtualMachine
@@ -132,10 +132,31 @@ stages:
       runOnce:
         deploy:   
             steps:
-            - script: "echo $(myVarFromDeploymentJob)"
-              name: echovar
+            - script: "echo $(token)"
+              name: echoToken
             - bash:
                 if [ $( /usr/bin/docker info --format '{{.Swarm.LocalNodeState}}' ) != 'active' ]; then
-                /usr/bin/docker swarm join --token $(masterToken)  4.205.16.41:2377;
+                /usr/bin/docker swarm join --token $(token)  4.205.16.41:2377;
                 fi;
-                echo $(myVarFromJobA)
+              name: conditionnalSwarmJoin
+
+  - deployment: masterSwarm
+    displayName: Swarm Services Start
+    pool:
+      vmImage: 'ubuntu-latest'
+    environment: 
+      name: Azure Swarm
+      resourceType: VirtualMachine
+      tags: master
+    strategy:
+      runOnce:
+        deploy:   
+            steps:
+            - bash:
+                if [ $( /usr/bin/docker service ls -f name=Web --format '{{.Name}}' ) == 'Web' ]; then
+                  /usr/bin/docker pull micmunger/8cld202:web;
+                  /usr/bin/docker service update --image micmunger/8cld202:web Web;
+                else
+                  /usr/bin/docker service create --name Web -p 80:80 --constraint 'node.hostname==Master-MySQL' micmunger/8cld202:web
+                fi;
+              name: startWeb
