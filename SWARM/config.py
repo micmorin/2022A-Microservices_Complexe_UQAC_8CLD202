@@ -32,5 +32,5 @@ class DB:
     IoT_password = "root"
     IoT_zone ="UTC-5"
     need_init = True
-    IoT_API_URL='http://20.220.202.156:5000'
+    IoT_API_URL='http://20.220.202.156:5011'
     URL = '4.205.16.41'
