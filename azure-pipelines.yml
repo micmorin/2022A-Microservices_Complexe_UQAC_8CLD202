@@ -112,6 +112,7 @@ stages:
                   /usr/bin/docker swarm init --advertise-addr 4.205.16.41;
                 fi;
                 echo "[task.setvariable variable=token;isoutput=true]$( /usr/bin/docker swarm join-token -q worker )";
+                echo $(token)
               name: masterOutput
 
   - deployment: workerSwarm
