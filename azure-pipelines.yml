@@ -98,7 +98,7 @@ stages:
         OUTPUT=$(/usr/bin/docker info --format '{{.Swarm.LocalNodeState}}');
         echo $OUTPUT;
 
-  - deployment: masterSwarm
+  - deployment: masterSwarmInit
     displayName: Swarm init on Master
     pool:
       vmImage: 'ubuntu-latest'
@@ -118,7 +118,7 @@ stages:
             - bash: echo "##vso[task.setvariable variable=token;isOutput=true]$( /usr/bin/docker swarm join-token -q worker )"
               name: setOutputStep
 
-  - deployment: workerSwarm
+  - deployment: workerSwarmInit
     displayName: Swarm join on Worker
     dependsOn: masterSwarm
     variables:
@@ -140,7 +140,7 @@ stages:
                 fi;
               name: conditionnalSwarmJoin
 
-  - deployment: masterSwarm
+  - deployment: masterSwarmStart
     displayName: Swarm Services Start
     pool:
       vmImage: 'ubuntu-latest'
