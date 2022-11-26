@@ -42,9 +42,9 @@ stages:
     pool:
       vmImage: ubuntu-latest
     steps:      
-      - task: AzureCLI@2
-        inputs:
-          azureSubscription: 'Azure subscription 1(1aab54f1-babe-4322-95b4-185df45b9d75)'
-          scriptType: 'pscore'
-          scriptLocation: 'inlineScript'
-          inlineScript: 'Start-AzVM -ResourceGroupName CLD202 -Name Master-MySQL && Start-AzVM -ResourceGroupName CLD202 -Name Worker-IoT'
+    - task: AzureCLI@2
+      inputs:
+        azureSubscription: 'Azure subscription 1(1aab54f1-babe-4322-95b4-185df45b9d75)'
+        scriptType: 'ps'
+        scriptLocation: 'inlineScript'
+        inlineScript: 'Start-AzVM -ResourceGroupName CLD202 -Name Master-MySQL'
