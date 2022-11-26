@@ -107,7 +107,7 @@ stages:
       runOnce:
         deploy:   
             steps:
-            - script: |
+            - bash: |
                 OUTPUT=$(/usr/bin/docker info --format '{{.Swarm.LocalNodeState}}');
                 if [$OUTPUT -eq 'active']
                 then
