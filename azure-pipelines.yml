@@ -187,7 +187,7 @@ stages:
             - bash:
                 if [ $( /usr/bin/docker service ls -f name=IoT_DB --format '{{.Name}}' ) == 'IoT_DB' ]; then
                   /usr/bin/docker pull micmunger/8cld202:iot_db;
-                  /usr/bin/docker service update --image micmunger/8cld202:mysql_db iot_db;
+                  /usr/bin/docker service update --image micmunger/8cld202:iot_db IoT_DB;
                 else
                   /usr/bin/docker service create --name IoT_DB -p 6667:6667 -p 9091:9091 --constraint 'node.hostname==Master-MySQL' micmunger/8cld202:iot_db;
                 fi;
