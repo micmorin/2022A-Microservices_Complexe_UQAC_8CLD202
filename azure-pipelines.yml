@@ -108,7 +108,8 @@ stages:
         deploy:   
             steps:
             - script: |
-                if ["$(/usr/bin/docker info --format '{{.Swarm.LocalNodeState}}')" -eq "active"]
+                OUTPUT=$(/usr/bin/docker info --format '{{.Swarm.LocalNodeState}}');
+                if ["$OUTPUT" -eq "active"]
                 then
                   echo 'hi'
                 fi
