@@ -109,7 +109,7 @@ stages:
             steps:
             - script: |
                 OUTPUT=$(/usr/bin/docker info --format '{{.Swarm.LocalNodeState}}');
-                if ["$OUTPUT" -eq "active"]
+                if ['$OUTPUT' -eq 'active']
                 then
                   echo 'hi'
                 fi
