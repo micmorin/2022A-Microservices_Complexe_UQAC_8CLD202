@@ -112,4 +112,4 @@ stages:
                 if [ $OUTPUT == 'active' ]
                 then
                 echo 'hi'
-                fi;
+                fi
