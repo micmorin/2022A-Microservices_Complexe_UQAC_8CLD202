@@ -131,4 +131,4 @@ stages:
                 if [ $( /usr/bin/docker info --format '{{.Swarm.LocalNodeState}}' ) != 'active' ]; then
                 /usr/bin/docker swarm join --token $(masterToken)  4.205.16.41:2377;
                 fi
-                echo "$(masterToken)";
+                echo $(masterToken);
