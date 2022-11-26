@@ -120,7 +120,7 @@ stages:
 
   - deployment: workerSwarmInit
     displayName: Swarm join on Worker
-    dependsOn: masterSwarm
+    dependsOn: masterSwarmInit
     variables:
             #$[dependencies.<job-name>.outputs['<lifecycle-hookname>_<resource-name>.<step-name>.<variable-name>']]
       token: $[ dependencies.masterSwarm.outputs['Deploy_Master-MySQL.setOutputStep.token'] ]
