@@ -134,7 +134,7 @@ stages:
               name: conditionnalSwarmJoin
 
   - deployment: masterSwarmStart
-    displayName: Swarm Services Start
+    displayName: Master Swarm Services Start
     dependsOn: workerSwarmInit
     pool:
       vmImage: 'ubuntu-latest'
@@ -154,3 +154,49 @@ stages:
                   /usr/bin/docker service create --name Web -p 80:80 --constraint 'node.hostname==Master-MySQL' micmunger/8cld202:web;
                 fi;
               name: startWeb
+            - bash:
+                if [ $( /usr/bin/docker service ls -f name=MySQL_DB --format '{{.Name}}' ) == 'MySQL_DB' ]; then
+                  /usr/bin/docker pull micmunger/8cld202:mysql_db;
+                  /usr/bin/docker service update --image micmunger/8cld202:mysql_db MySQL_DB;
+                else
+                  /usr/bin/docker service create --name MySQL_DB -p 80:80 --constraint 'node.hostname==Master-MySQL' micmunger/8cld202:mysql_db;
+                fi;
+              name: startMySQL_DB
+            - bash:
+                if [ $( /usr/bin/docker service ls -f name=MySQL_API --format '{{.Name}}' ) == 'MySQL_API' ]; then
+                  /usr/bin/docker pull micmunger/8cld202:mysql_api;
+                  /usr/bin/docker service update --image micmunger/8cld202:mysql_api MySQL_API;
+                else
+                  /usr/bin/docker service create --name MySQL_API -p 80:80 --constraint 'node.hostname==Master-MySQL' micmunger/8cld202:mysql_api;
+                fi;
+              name: startMySQL_API
+  
+  - deployment: workerSwarmStart
+    displayName: Worker Swarm Services Start
+    dependsOn: workerSwarmInit
+    pool:
+      vmImage: 'ubuntu-latest'
+    environment: 
+      name: Azure Swarm
+      resourceType: VirtualMachine
+      tags: master
+    strategy:
+      runOnce:
+        deploy:   
+            steps:
+            - bash:
+                if [ $( /usr/bin/docker service ls -f name=IoT_DB --format '{{.Name}}' ) == 'IoT_DB' ]; then
+                  /usr/bin/docker pull micmunger/8cld202:iot_db;
+                  /usr/bin/docker service update --image micmunger/8cld202:mysql_db iot_db;
+                else
+                  /usr/bin/docker service create --name IoT_DB -p 80:80 --constraint 'node.hostname==Master-MySQL' micmunger/8cld202:iot_db;
+                fi;
+              name: startMySQL_DB
+            - bash:
+                if [ $( /usr/bin/docker service ls -f name=IoT_API --format '{{.Name}}' ) == 'IoT_API' ]; then
+                  /usr/bin/docker pull micmunger/8cld202:iot_api;
+                  /usr/bin/docker service update --image micmunger/8cld202:iot_api IoT_API;
+                else
+                  /usr/bin/docker service create --name IoT_API -p 80:80 --constraint 'node.hostname==Master-MySQL' micmunger/8cld202:iot_api;
+                fi;
+              name: startMySQL_API
