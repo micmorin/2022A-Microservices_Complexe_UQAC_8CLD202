@@ -33,3 +33,18 @@ stages:
       
       - script: /usr/bin/docker build --pull -t micmunger/8cld202:iot_db ./IoT_DB && /usr/bin/docker login -u $(username) -p $(password) docker.io && /usr/bin/docker push micmunger/8cld202:iot_db
         displayName: Build and Push IoT_DB
+
+- stage: Start
+  displayName: Start Azure VMs
+  jobs:
+  - job: Start
+    displayName: Start Azure VMs
+    pool:
+      vmImage: ubuntu-latest
+    steps:      
+      - task: AzureCLI@2
+        inputs:
+          azureSubscription: 'Azure subscription 1(1aab54f1-babe-4322-95b4-185df45b9d75)'
+          scriptType: 'pscore'
+          scriptLocation: 'inlineScript'
+          inlineScript: 'Start-AzVM -ResourceGroupName CLD202 -Name Master-MySQL && Start-AzVM -ResourceGroupName CLD202 -Name Worker-IoT'
