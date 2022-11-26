@@ -143,7 +143,10 @@ stages:
   - deployment: A
     pool:
       vmImage: 'ubuntu-latest'
-    environment: Azure Swarm
+    environment: 
+      name: Azure Swarm
+      resourceType: VirtualMachine
+      tags: master
     strategy:                  
       runOnce:
         deploy:
