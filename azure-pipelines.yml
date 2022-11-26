@@ -8,85 +8,85 @@ variables:
   tag: '$(Build.BuildId)'
 
 stages:
-- stage: Build
-  displayName: Build and Push to Docker Hub
-  jobs:
-  - job: Build_Web
-    displayName: Build and Push Web
-    pool:
-      vmImage: ubuntu-latest
-    steps:
-      - script: /usr/bin/docker build --pull -t micmunger/8cld202:web -f ./SWARM/web/Dockerfile ./
-        displayName: Build
-      - script: /usr/bin/docker login -u $(username) -p $(password) docker.io && /usr/bin/docker push micmunger/8cld202:web
-        displayName: Push  
+# - stage: Build
+#   displayName: Build and Push to Docker Hub
+#   jobs:
+#   - job: Build_Web
+#     displayName: Build and Push Web
+#     pool:
+#       vmImage: ubuntu-latest
+#     steps:
+#       - script: /usr/bin/docker build --pull -t micmunger/8cld202:web -f ./SWARM/web/Dockerfile ./
+#         displayName: Build
+#       - script: /usr/bin/docker login -u $(username) -p $(password) docker.io && /usr/bin/docker push micmunger/8cld202:web
+#         displayName: Push  
   
-  - job: Build_MySQL_API
-    displayName: Build and Push MySQL_API
-    pool:
-      vmImage: ubuntu-latest
-    steps:
-      - script: /usr/bin/docker build --pull -t micmunger/8cld202:mysql_api -f ./SWARM/mysql_api/Dockerfile ./
-        displayName: Build
-      - script: /usr/bin/docker login -u $(username) -p $(password) docker.io && /usr/bin/docker push micmunger/8cld202:mysql_api
-        displayName: Push
+#   - job: Build_MySQL_API
+#     displayName: Build and Push MySQL_API
+#     pool:
+#       vmImage: ubuntu-latest
+#     steps:
+#       - script: /usr/bin/docker build --pull -t micmunger/8cld202:mysql_api -f ./SWARM/mysql_api/Dockerfile ./
+#         displayName: Build
+#       - script: /usr/bin/docker login -u $(username) -p $(password) docker.io && /usr/bin/docker push micmunger/8cld202:mysql_api
+#         displayName: Push
 
-  - job: Build_IoT_API
-    displayName: Build and Push IoT_API
-    pool:
-      vmImage: ubuntu-latest
-    steps:
-      - script: /usr/bin/docker build --pull -t micmunger/8cld202:iot_api -f ./SWARM/iot_api/Dockerfile ./ && /usr/bin/docker login -u $(username) -p $(password) docker.io && /usr/bin/docker push micmunger/8cld202:iot_api
-        displayName: Build
-      - script: /usr/bin/docker build --pull -t micmunger/8cld202:iot_api -f ./SWARM/iot_api/Dockerfile ./ && /usr/bin/docker login -u $(username) -p $(password) docker.io && /usr/bin/docker push micmunger/8cld202:iot_api
-        displayName: Push
+#   - job: Build_IoT_API
+#     displayName: Build and Push IoT_API
+#     pool:
+#       vmImage: ubuntu-latest
+#     steps:
+#       - script: /usr/bin/docker build --pull -t micmunger/8cld202:iot_api -f ./SWARM/iot_api/Dockerfile ./ && /usr/bin/docker login -u $(username) -p $(password) docker.io && /usr/bin/docker push micmunger/8cld202:iot_api
+#         displayName: Build
+#       - script: /usr/bin/docker build --pull -t micmunger/8cld202:iot_api -f ./SWARM/iot_api/Dockerfile ./ && /usr/bin/docker login -u $(username) -p $(password) docker.io && /usr/bin/docker push micmunger/8cld202:iot_api
+#         displayName: Push
   
-  - job: Build_MySQL_DB
-    displayName: Build and Push MySQL_DB
-    pool:
-      vmImage: ubuntu-latest
-    steps:
-      - script: /usr/bin/docker build --pull -t micmunger/8cld202:mysql_db ./MySQL_DB 
-        displayName: Build
-      - script: /usr/bin/docker login -u $(username) -p $(password) docker.io && /usr/bin/docker push micmunger/8cld202:mysql_db
-        displayName: Push
+#   - job: Build_MySQL_DB
+#     displayName: Build and Push MySQL_DB
+#     pool:
+#       vmImage: ubuntu-latest
+#     steps:
+#       - script: /usr/bin/docker build --pull -t micmunger/8cld202:mysql_db ./MySQL_DB 
+#         displayName: Build
+#       - script: /usr/bin/docker login -u $(username) -p $(password) docker.io && /usr/bin/docker push micmunger/8cld202:mysql_db
+#         displayName: Push
   
-  - job: Build_IoT_DB
-    displayName: Build and Push IoT_DB
-    pool:
-      vmImage: ubuntu-latest
-    steps:  
-      - script: /usr/bin/docker build --pull -t micmunger/8cld202:iot_db ./IoT_DB 
-        displayName: Build
-      - script: /usr/bin/docker login -u $(username) -p $(password) docker.io && /usr/bin/docker push micmunger/8cld202:iot_db
-        displayName: Push
+#   - job: Build_IoT_DB
+#     displayName: Build and Push IoT_DB
+#     pool:
+#       vmImage: ubuntu-latest
+#     steps:  
+#       - script: /usr/bin/docker build --pull -t micmunger/8cld202:iot_db ./IoT_DB 
+#         displayName: Build
+#       - script: /usr/bin/docker login -u $(username) -p $(password) docker.io && /usr/bin/docker push micmunger/8cld202:iot_db
+#         displayName: Push
 
-- stage: Start
-  displayName: Start Azure VMs
-  jobs:
-  - job: Start_Master
-    displayName: Start Master-MySQL
-    pool:
-      vmImage: ubuntu-latest
-    steps:      
-    - task: AzurePowerShell@5
-      inputs:
-        azureSubscription: 'Azure subscription 1(1aab54f1-babe-4322-95b4-185df45b9d75)'
-        ScriptType: 'InlineScript'
-        Inline: 'Start-AzVM -ResourceGroupName CLD202 -Name Master-MySQL'
-        azurePowerShellVersion: 'LatestVersion'
+# - stage: Start
+#   displayName: Start Azure VMs
+#   jobs:
+#   - job: Start_Master
+#     displayName: Start Master-MySQL
+#     pool:
+#       vmImage: ubuntu-latest
+#     steps:      
+#     - task: AzurePowerShell@5
+#       inputs:
+#         azureSubscription: 'Azure subscription 1(1aab54f1-babe-4322-95b4-185df45b9d75)'
+#         ScriptType: 'InlineScript'
+#         Inline: 'Start-AzVM -ResourceGroupName CLD202 -Name Master-MySQL'
+#         azurePowerShellVersion: 'LatestVersion'
   
-  - job: Start_Worker
-    displayName: Start Worker-IoT
-    pool:
-      vmImage: ubuntu-latest
-    steps:      
-    - task: AzurePowerShell@5
-      inputs:
-        azureSubscription: 'Azure subscription 1(1aab54f1-babe-4322-95b4-185df45b9d75)'
-        ScriptType: 'InlineScript'
-        Inline: 'Start-AzVM -ResourceGroupName CLD202 -Name Worker-IoT'
-        azurePowerShellVersion: 'LatestVersion'
+#   - job: Start_Worker
+#     displayName: Start Worker-IoT
+#     pool:
+#       vmImage: ubuntu-latest
+#     steps:      
+#     - task: AzurePowerShell@5
+#       inputs:
+#         azureSubscription: 'Azure subscription 1(1aab54f1-babe-4322-95b4-185df45b9d75)'
+#         ScriptType: 'InlineScript'
+#         Inline: 'Start-AzVM -ResourceGroupName CLD202 -Name Worker-IoT'
+#         azurePowerShellVersion: 'LatestVersion'
 
 - stage: Docker
   displayName: Deploy with Docker Swarm
