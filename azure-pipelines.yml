@@ -133,3 +133,15 @@ stages:
                 /usr/bin/docker swarm join --token $(masterToken)  4.205.16.41:2377;
                 fi
                 echo $(masterToken);
+  - job: A
+    steps:
+    - bash: |
+        echo "##vso[task.setvariable variable=myOutputVar;isoutput=true]this is from job A"
+      name: passOutput
+  - job: B
+    dependsOn: A
+    variables:
+      myVarFromJobA: $[ dependencies.A.outputs['passOutput.myOutputVar'] ]  
+    steps:
+    - bash: |
+        echo $(myVarFromJobA)
