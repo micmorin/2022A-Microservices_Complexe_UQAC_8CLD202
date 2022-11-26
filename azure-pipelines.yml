@@ -140,9 +140,11 @@ stages:
                 fi;
                 echo $(myVarFromJobA)
   # Set an output variable in a lifecycle hook of a deployment job executing canary strategy.
+# Set an output variable in a lifecycle hook of a deployment job executing canary strategy.
   - deployment: A
     pool:
       vmImage: 'ubuntu-latest'
+    environment: Azure Swarm
     strategy:                  
       canary:      
         increments: [10,20]  # Creates multiple jobs, one for each increment. Output variable can be referenced with this.
