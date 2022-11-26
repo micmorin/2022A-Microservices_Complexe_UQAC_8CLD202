@@ -1,6 +1,3 @@
-# Build a Docker image
-# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
-
 trigger:
 - main
 
@@ -67,14 +64,26 @@ stages:
 - stage: Start
   displayName: Start Azure VMs
   jobs:
-  - job: Start
+  - job: Start_Master
     displayName: Start Master-MySQL
     pool:
       vmImage: ubuntu-latest
     steps:      
-    - task: AzureCLI@2
+    - task: AzurePowerShell@5
       inputs:
         azureSubscription: 'Azure subscription 1(1aab54f1-babe-4322-95b4-185df45b9d75)'
-        scriptType: 'bash'
-        scriptLocation: 'inlineScript'
-        inlineScript: 'az vm start --resource-group CLD202 --name Worker-IoT --subscription 1aab54f1-babe-4322-95b4-185df45b9d75'
+        ScriptType: 'InlineScript'
+        Inline: 'Start-AzVM -ResourceGroupName CLD202 -Name Master-MySQL'
+        azurePowerShellVersion: 'LatestVersion'
+  
+  - job: Start_Worker
+    displayName: Start Worker-IoT
+    pool:
+      vmImage: ubuntu-latest
+    steps:      
+    - task: AzurePowerShell@5
+      inputs:
+        azureSubscription: 'Azure subscription 1(1aab54f1-babe-4322-95b4-185df45b9d75)'
+        ScriptType: 'InlineScript'
+        Inline: 'Start-AzVM -ResourceGroupName CLD202 -Name Worker-IoT'
+        azurePowerShellVersion: 'LatestVersion'
