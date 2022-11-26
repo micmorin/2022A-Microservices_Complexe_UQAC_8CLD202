@@ -123,7 +123,7 @@ stages:
     displayName: Swarm init on Worker
     dependsOn: masterSwarm
     variables:
-      myVarFromDeploymentJob: $[ dependencies.masterSwarm.outputs['Master_Deploy_Master-MySQL.setvarStep.myOutputVar'] ]
+      myVarFromDeploymentJob: $[ dependencies.masterSwarm.outputs['Deploy_Master-MySQL.setvarStep.myOutputVar'] ]
     environment: 
       name: Azure Swarm
       resourceType: VirtualMachine
