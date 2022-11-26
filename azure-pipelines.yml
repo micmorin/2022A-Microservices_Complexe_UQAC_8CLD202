@@ -87,3 +87,20 @@ stages:
         ScriptType: 'InlineScript'
         Inline: 'Start-AzVM -ResourceGroupName CLD202 -Name Worker-IoT'
         azurePowerShellVersion: 'LatestVersion'
+
+- stage: Docker
+  displayName: Deploy with Docker Swarm
+  jobs:
+  - job: A
+    steps:
+    - bash: |
+        echo "##vso[task.setvariable variable=myOutputVar;isoutput=true]this is from job A"
+      name: passOutput
+
+  - job: B
+    dependsOn: A
+    variables:
+      myVarFromJobA: $[ dependencies.A.outputs['passOutput.myOutputVar'] ]  
+    steps:
+    - bash: |
+        echo $(myVarFromJobA)
