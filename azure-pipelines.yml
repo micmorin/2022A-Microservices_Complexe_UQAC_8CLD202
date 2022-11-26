@@ -95,5 +95,5 @@ stages:
     displayName: Initialize swarm
     steps:
     - bash: |
-        /usr/bin/docker info --format '{{.Swarm.LocalNodeState}}';
-        echo $?;
+        OUTPUT=$(/usr/bin/docker info --format '{{.Swarm.LocalNodeState}}');
+        echo $OUTPUT;
