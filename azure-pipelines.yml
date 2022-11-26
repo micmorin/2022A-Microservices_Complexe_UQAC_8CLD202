@@ -97,8 +97,8 @@ stages:
     - bash: |
         OUTPUT=$(/usr/bin/docker info --format '{{.Swarm.LocalNodeState}}');
         echo $OUTPUT;
-  - deployment: VMDeploy
-    displayName: Deploy to VM
+  - deployment: masterSwarm
+    displayName: Swarm init on Master
     environment: 
       name: Azure Swarm
       resourceType: VirtualMachine
@@ -108,6 +108,26 @@ stages:
         deploy:   
             steps:
             - bash:
-                if [ $( /usr/bin/docker info --format '{{.Swarm.LocalNodeState}}' ) == 'active' ]; then
-                  echo $( /usr/bin/docker swarm join-token -q worker );
+                if [ $( /usr/bin/docker info --format '{{.Swarm.LocalNodeState}}' ) != 'active' ]; then
+                  /usr/bin/docker swarm init --advertise-addr 4.205.16.41;
+                fi
+                echo "##vso[task.setvariable variable=token;isoutput=true]$( /usr/bin/docker swarm join-token -q worker )";
+              name: masterOutput
+
+  - deployment: workerSwarm
+    displayName: Swarm init on Worker
+    dependsOn: masterSwarm
+    variables:
+      masterToken: $[ dependencies.masterSwarm.outputs['masterOutput.token'] ]  
+    environment: 
+      name: Azure Swarm
+      resourceType: VirtualMachine
+      tags: worker
+    strategy:
+      runOnce:
+        deploy:   
+            steps:
+            - bash:
+                if [ $( /usr/bin/docker info --format '{{.Swarm.LocalNodeState}}' ) != 'active' ]; then
+                /usr/bin/docker swarm join --token $(masterToken)  4.205.16.41:2377;
                 fi
