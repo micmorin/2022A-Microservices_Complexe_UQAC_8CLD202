@@ -142,6 +142,7 @@ stages:
 
   - deployment: masterSwarmStart
     displayName: Swarm Services Start
+    dependsOn: workerSwarmInit
     pool:
       vmImage: 'ubuntu-latest'
     environment: 
@@ -157,6 +158,6 @@ stages:
                   /usr/bin/docker pull micmunger/8cld202:web;
                   /usr/bin/docker service update --image micmunger/8cld202:web Web;
                 else
-                  /usr/bin/docker service create --name Web -p 80:80 --constraint 'node.hostname==Master-MySQL' micmunger/8cld202:web
+                  /usr/bin/docker service create --name Web -p 80:80 --constraint 'node.hostname==Master-MySQL' micmunger/8cld202:web;
                 fi;
               name: startWeb
