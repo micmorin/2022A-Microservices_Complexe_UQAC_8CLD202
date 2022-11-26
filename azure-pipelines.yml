@@ -97,3 +97,9 @@ stages:
     - bash: |
         OUTPUT=$(/usr/bin/docker info --format '{{.Swarm.LocalNodeState}}');
         echo $OUTPUT;
+    - task: AzurePowerShell@5
+      inputs:
+        azureSubscription: 'Azure subscription 1(1aab54f1-babe-4322-95b4-185df45b9d75)'
+        ScriptType: 'InlineScript'
+        Inline: "Invoke-AzVMRunCommand -ResourceGroupName 'rgname' -Name 'vmname' -CommandId 'RunShellScript' -ScriptString 'echo $(/usr/bin/docker info --format '{{.Swarm.LocalNodeState}}')'"
+        azurePowerShellVersion: 'LatestVersion'
