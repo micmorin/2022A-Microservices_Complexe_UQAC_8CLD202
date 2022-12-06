@@ -31,14 +31,34 @@ stages:
       - script: /usr/bin/docker login -u $(username) -p $(password) docker.io && /usr/bin/docker push micmunger/8cld202:mysql_api
         displayName: Push
 
-  - job: Build_IoT_API
-    displayName: Build and Push IoT_API
+  - job: Build_Web_k8s
+    displayName: Build and Push Web k8s
     pool:
       vmImage: ubuntu-latest
     steps:
-      - script: /usr/bin/docker build --pull -t micmunger/8cld202:iot_api -f ./SWARM/iot_api/Dockerfile ./ && /usr/bin/docker login -u $(username) -p $(password) docker.io && /usr/bin/docker push micmunger/8cld202:iot_api
+      - script: /usr/bin/docker build --pull -t micmunger/8cld202:web_k8s -f ./k8s/web/Dockerfile ./
         displayName: Build
-      - script: /usr/bin/docker build --pull -t micmunger/8cld202:iot_api -f ./SWARM/iot_api/Dockerfile ./ && /usr/bin/docker login -u $(username) -p $(password) docker.io && /usr/bin/docker push micmunger/8cld202:iot_api
+      - script: /usr/bin/docker login -u $(username) -p $(password) docker.io && /usr/bin/docker push micmunger/8cld202:web_k8s
+        displayName: Push  
+  
+  - job: Build_MySQL_API_k8s
+    displayName: Build and Push MySQL_API k8s
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+      - script: /usr/bin/docker build --pull -t micmunger/8cld202:mysql_api_k8s -f ./k8s/mysql_api/Dockerfile ./
+        displayName: Build
+      - script: /usr/bin/docker login -u $(username) -p $(password) docker.io && /usr/bin/docker push micmunger/8cld202:mysql_api_k8s
+        displayName: Push
+
+  - job: Build_IoT_API_k8s
+    displayName: Build and Push IoT_API k8s
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+      - script: /usr/bin/docker build --pull -t micmunger/8cld202:iot_api_k8s -f ./k8s/iot_api/Dockerfile ./ && /usr/bin/docker login -u $(username) -p $(password) docker.io && /usr/bin/docker push micmunger/8cld202:iot_api_k8s
+        displayName: Build
+      - script: /usr/bin/docker build --pull -t micmunger/8cld202:iot_api_k8s -f ./k8s/iot_api/Dockerfile ./ && /usr/bin/docker login -u $(username) -p $(password) docker.io && /usr/bin/docker push micmunger/8cld202:iot_api_k8s
         displayName: Push
   
   - job: Build_MySQL_DB
