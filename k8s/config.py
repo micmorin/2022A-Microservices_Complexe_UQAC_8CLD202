@@ -24,13 +24,13 @@ class DevConfig(Config):
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 class DB:
-    MySQL_API_URL='http://MySQL_API:5000'
-    MySQL_URL = 'MySQL_DB'
-    IoT_ip = "IoT_DB"
+    MySQL_API_URL='http://mysql-api:5000'
+    MySQL_URL = 'mysql-db'
+    IoT_ip = "iot-db"
     IoT_port = "6667"
     IoT_username = "root"
     IoT_password = "root"
     IoT_zone ="UTC-5"
     need_init = True
-    IoT_API_URL='http://IoT_API:5011'
-    URL = 'Web'
+    IoT_API_URL='http://iot-api:5011'
+    URL = 'web'

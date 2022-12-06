@@ -1,0 +1,165 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: web
+  template:
+    metadata:
+      labels:
+        app: web
+    spec:
+      containers:
+      - name: web
+        image: micmunger/8cld202:web_k8s
+        ports:
+        - containerPort: 80
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: web
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 80
+  selector:
+    app: web
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: iot-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: iot-api
+  template:
+    metadata:
+      labels:
+        app: iot-api
+    spec:
+      containers:
+      - name: iot-api
+        image: micmunger/8cld202:iot_api_h8s
+        ports:
+        - containerPort: 5000
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: iot-api
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 5011
+  selector:
+    app: iot-api
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql-api
+  template:
+    metadata:
+      labels:
+        app: mysql-api
+    spec:
+      containers:
+      - name: mysql-api
+        image: micmunger/8cld202:mysql_api_h8s
+        ports:
+        - containerPort: 5000
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-api
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 5000
+  selector:
+    app: mysql-api
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: iot-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: iot-db
+  template:
+    metadata:
+      labels:
+        app: iot-db
+    spec:
+      containers:
+      - name: iot-db
+        image: micmunger/8cld202:iot_db
+        ports:
+        - containerPort: 6667
+        - containerPort: 9091
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: iot-db
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 6667
+    - port: 9091
+  selector:
+    app: iot-db
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql-db
+  template:
+    metadata:
+      labels:
+        app: mysql-db
+    spec:
+      containers:
+      - name: mysql-db
+        image: micmunger/8cld202:mysql_db
+        ports:
+        - containerPort: 3306
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-db
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 3306
+  selector:
+    app: mysql-db
