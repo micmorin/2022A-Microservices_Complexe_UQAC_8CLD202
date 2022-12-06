@@ -26,7 +26,9 @@ metadata:
 spec:
   type: LoadBalancer
   ports:
-    - port: 80
+  - name: default
+    port: 80
+    targetPort: 80
   selector:
     app: web
 
@@ -47,7 +49,7 @@ spec:
     spec:
       containers:
       - name: iot-api
-        image: micmunger/8cld202:iot_api_h8s
+        image: micmunger/8cld202:iot_api_k8s
         ports:
         - containerPort: 5000
 
@@ -59,7 +61,9 @@ metadata:
 spec:
   type: LoadBalancer
   ports:
-    - port: 5011
+  - name: default
+    port: 5000
+    targetPort: 5011
   selector:
     app: iot-api
 
@@ -80,7 +84,7 @@ spec:
     spec:
       containers:
       - name: mysql-api
-        image: micmunger/8cld202:mysql_api_h8s
+        image: micmunger/8cld202:mysql_api_k8s
         ports:
         - containerPort: 5000
 
@@ -92,7 +96,9 @@ metadata:
 spec:
   type: LoadBalancer
   ports:
-    - port: 5000
+  - name: default
+    port: 5000
+    targetPort: 5000
   selector:
     app: mysql-api
 
@@ -115,8 +121,10 @@ spec:
       - name: iot-db
         image: micmunger/8cld202:iot_db
         ports:
-        - containerPort: 6667
-        - containerPort: 9091
+        - name: iport
+          containerPort: 6667
+        - name: iiport
+          containerPort: 9091
 
 ---
 apiVersion: v1
@@ -126,8 +134,12 @@ metadata:
 spec:
   type: LoadBalancer
   ports:
-    - port: 6667
-    - port: 9091
+  - name: iport
+    port: 6667
+    targetPort: 6667
+  - name: iiport
+    port: 9091
+    targetPort: 9091
   selector:
     app: iot-db
 
@@ -160,6 +172,8 @@ metadata:
 spec:
   type: LoadBalancer
   ports:
-    - port: 3306
+  - name: default
+    port: 3306
+    targetPort: 3306
   selector:
     app: mysql-db
