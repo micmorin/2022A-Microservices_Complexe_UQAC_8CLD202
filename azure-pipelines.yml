@@ -229,6 +229,18 @@ stages:
     pool:
       vmImage: ubuntu-latest
     steps:
+    
+      - task: Kubernetes@1
+        inputs:
+          connectionType: 'Azure Resource Manager'
+          azureSubscriptionEndpoint: 'connection k8s'
+          azureResourceGroup: 'k8s'
+          kubernetesCluster: 'k8s'
+          command: 'delete'
+          arguments: '--all deployment'
+          secretType: 'dockerRegistry'
+          containerRegistryType: 'Azure Container Registry'
+        
       - task: Kubernetes@1
         inputs:
           connectionType: 'Azure Resource Manager'
