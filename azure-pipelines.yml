@@ -220,3 +220,22 @@ stages:
                   /usr/bin/docker service create --name IoT_API -p 5011:5000 --constraint 'node.hostname==Master-MySQL' micmunger/8cld202:iot_api;
                 fi;
               name: startIoT_API
+
+- stage: k8s
+  displayName: Deploy with Kubernetes
+  jobs:
+  - job: k8s_job
+    displayName: deployment k8s
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+      - task: Kubernetes@1
+        inputs:
+          connectionType: 'Azure Resource Manager'
+          azureSubscriptionEndpoint: 'connection k8s'
+          azureResourceGroup: 'k8s'
+          kubernetesCluster: 'k8s'
+          command: 'apply'
+          arguments: '-f ./azure_manifest.yaml'
+          secretType: 'dockerRegistry'
+          containerRegistryType: 'Azure Container Registry'
