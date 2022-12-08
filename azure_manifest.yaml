@@ -63,7 +63,7 @@ spec:
   ports:
   - name: default
     port: 5000
-    targetPort: 5011
+    targetPort: 5000
   selector:
     app: iot-api
 
