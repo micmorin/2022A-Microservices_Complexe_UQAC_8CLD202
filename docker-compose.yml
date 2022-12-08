@@ -14,10 +14,6 @@ services:
     depends_on:
     - mysql_api
     - iot_api
-    deploy:
-      placement:
-        constraints:
-          - "node.hostname == Web"
 
   iot_api:
     container_name: 8CLD202-API_pour_IoTDB
@@ -32,10 +28,6 @@ services:
       - ./IoT_API/app/:/app # Overrides Dockerfile COPY for development
     depends_on:
     - mysql_api
-    deploy:
-      placement:
-        constraints:
-          - "node.hostname == IoT"
 
   mysql_api:
     container_name: 8CLD202-API_pour_MySQL
@@ -48,10 +40,6 @@ services:
       - ./MySQL_API/app/:/app # Overrides Dockerfile COPY for development
     depends_on:
     - mysql_db
-    deploy:
-      placement:
-        constraints:
-          - "node.hostname == MySQL"
 
   mysql_db:
     container_name: 8CLD202-Base_de_Donnees_MySQL
@@ -61,10 +49,6 @@ services:
       dockerfile: Dockerfile
       tags:
         - "micmunger/8cld202:mysql_db"
-    deploy:
-      placement:
-        constraints:
-          - "node.hostname == MySQL"
 
   iot_db:
     container_name: 8CLD202-Base_de_Donnees_IoTDB
@@ -77,7 +61,3 @@ services:
       dockerfile: Dockerfile
       tags:
         - "micmunger/8cld202:iot_db"
-    deploy:
-        placement:
-          constraints:
-              - "node.hostname == IoT"
