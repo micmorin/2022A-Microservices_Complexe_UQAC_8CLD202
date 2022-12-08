@@ -32,5 +32,5 @@ class DB:
     IoT_password = "root"
     IoT_zone ="UTC-5"
     need_init = True
-    IoT_API_URL='http://iot-api:5011'
+    IoT_API_URL='http://iot-api:5000'
     URL = 'mysql-db'
