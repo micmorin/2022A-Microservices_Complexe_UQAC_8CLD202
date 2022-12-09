@@ -3,61 +3,45 @@ services:
   web:
     container_name: 8CLD202-Serveur_Web
     ports:
-      - "80:5000" # NECESSARY ports for Deployment
+      - "80:80"
     build:
-      context: ./Web
-      dockerfile: Dockerfile
-      tags:
-        - "micmunger/8cld202:web"
-    volumes:
-      - ./Web/app/:/app # Overrides Dockerfile COPY for development
+      context: ./
+      dockerfile: /k8s/web/Dockerfile
     depends_on:
-    - mysql_api
-    - iot_api
+    - mysql-api
+    - iot-api
 
-  iot_api:
+  iot-api:
     container_name: 8CLD202-API_pour_IoTDB
     build:
-      context: ./IoT_API
-      dockerfile: Dockerfile
-      tags:
-        - "micmunger/8cld202:iot_api"
+      context: ./
+      dockerfile: /k8s/IoT_API/Dockerfile
     ports:
-      - "3456:5000" # NECESSARY ports for Deployment
-    volumes:
-      - ./IoT_API/app/:/app # Overrides Dockerfile COPY for development
+      - "3456:5000"
     depends_on:
-    - mysql_api
+    - mysql-api
 
-  mysql_api:
+  mysql-api:
     container_name: 8CLD202-API_pour_MySQL
     build:
-      context: ./MySQL_API
-      dockerfile: Dockerfile
-      tags:
-        - "micmunger/8cld202:mysql_api"
-    volumes:
-      - ./MySQL_API/app/:/app # Overrides Dockerfile COPY for development
+      context: ./
+      dockerfile: /k8s/MySQL_API/Dockerfile
     depends_on:
-    - mysql_db
+    - mysql-db
 
-  mysql_db:
+  mysql-db:
     container_name: 8CLD202-Base_de_Donnees_MySQL
     restart: always
     build:
       context: ./MySQL_DB
       dockerfile: Dockerfile
-      tags:
-        - "micmunger/8cld202:mysql_db"
 
-  iot_db:
+  iot-db:
     container_name: 8CLD202-Base_de_Donnees_IoTDB
     restart: always
     ports:
-      - 6667:6667 # NECESSARY ports for Deployment
-      - 9091:9091 # NECESSARY ports for Deployment
+      - 6667:6667
+      - 9091:9091
     build:
       context: ./IoT_DB
       dockerfile: Dockerfile
-      tags:
-        - "micmunger/8cld202:iot_db"
