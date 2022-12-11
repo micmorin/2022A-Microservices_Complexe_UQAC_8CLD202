@@ -229,9 +229,12 @@ stages:
     pool:
       vmImage: ubuntu-latest
     steps:
-      - task: PowerShell@2
+      - task: AzurePowerShell@5
         inputs:
-          filePath: './startK8s.ps1'
+          azureSubscription: 'connection k8s'
+          ScriptType: 'InlineScript'
+          Inline: 'az aks start --resource-group k8s --name k8s'
+          preferredAzurePowerShellVersion: 'LatestVersion'
 
   - job: k8s_job
     displayName: deployment k8s
@@ -261,3 +264,4 @@ stages:
           arguments: '-f ./azure_manifest.yaml'
           secretType: 'dockerRegistry'
           containerRegistryType: 'Azure Container Registry'
+          
