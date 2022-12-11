@@ -224,8 +224,18 @@ stages:
 - stage: k8s
   displayName: Deploy with Kubernetes
   jobs:
+  - job: start_cluster
+    displayName: start cluster
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+      - task: PowerShell@2
+        inputs:
+          filePath: './startK8s.ps1'
+
   - job: k8s_job
     displayName: deployment k8s
+    dependsOn: start_cluster
     pool:
       vmImage: ubuntu-latest
     steps:
